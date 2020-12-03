@@ -1,5 +1,6 @@
 package com.mysoft.alpha.service.impl;
 
+import com.mysoft.alpha.cache.CacheKeyManager;
 import com.mysoft.alpha.dao.BxPromotionDao;
 import com.mysoft.alpha.dao.BxUserPromotionDao;
 import com.mysoft.alpha.dao.UserDao;
@@ -8,6 +9,8 @@ import com.mysoft.alpha.entity.BxUserPromotion;
 import com.mysoft.alpha.entity.User;
 import com.mysoft.alpha.exception.CustomException;
 import com.mysoft.alpha.service.BxPromotionService;
+import com.mysoft.alpha.util.BaseCache;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,15 +44,32 @@ public class BxPromotionServiceImpl implements BxPromotionService {
      */
     @Autowired
     private UserDao userDao;
+    /**
+     * 缓存
+     */
+    @Autowired
+    private BaseCache baseCache;
 
     @Override
     public BxPromotion findByUserid(Integer userid) {
-    	System.out.println("userid:"+userid);
-        BxUserPromotion bxUserPromotion = bxUserPromotionDao.findByUserId(userid);
-        if(bxUserPromotion==null) {
-        	return null;
+        String wechatPromotion = String.format(CacheKeyManager.WECHAT_PROMOTION, userid);
+        try {
+            Object cacheObj = baseCache.getOneHourCache().get(wechatPromotion, () -> {
+                BxUserPromotion bxUserPromotion = bxUserPromotionDao.findByUserId(userid);
+                System.out.println("BxPromotion 使用数据库");
+                if (bxUserPromotion == null) {
+                    return null;
+                }
+                return bxPromotionDao.getOne(bxUserPromotion.getPromotionId());
+            });
+            if (cacheObj instanceof BxPromotion) {
+                BxPromotion bxPromotion = (BxPromotion) cacheObj;
+                return bxPromotion;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return bxPromotionDao.getOne(bxUserPromotion.getPromotionId());
+        return null;
     }
 
     @Override

@@ -12,12 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-/**
- * 用户(User)表控制层
- *
- * @author makejava
- * @since 2020-08-02 16:14:15
- */
+
 @RestController
 @RequestMapping("/api/admin/user")
 public class UserController {

@@ -1,6 +1,8 @@
 package com.mysoft.alpha.util;
 
 import com.google.gson.Gson;
+import com.mysoft.alpha.result.ResultFactory;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -19,8 +21,6 @@ import java.util.Map;
  * 封装http get post
  */
 public class HttpUtils {
-
-
     private static  final Gson gson = new Gson();
 
     /**
@@ -28,8 +28,8 @@ public class HttpUtils {
      * @param url
      * @return
      */
-    public static Map<String,Object> doGet(String url){
-
+    @SuppressWarnings("unchecked")
+	public static Map<String,Object> doGet(String url){
         Map<String,Object> map = new HashMap<>();
         CloseableHttpClient httpClient =  HttpClients.createDefault();
 
@@ -45,7 +45,6 @@ public class HttpUtils {
         try{
            HttpResponse httpResponse = httpClient.execute(httpGet);
            if(httpResponse.getStatusLine().getStatusCode() == 200){
-
               String jsonResult = EntityUtils.toString( httpResponse.getEntity());
                map = gson.fromJson(jsonResult,map.getClass());
            }

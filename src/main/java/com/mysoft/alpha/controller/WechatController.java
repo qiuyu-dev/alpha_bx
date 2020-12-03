@@ -136,6 +136,9 @@ public class WechatController {
         Map<String ,Object> baseMap =  HttpUtils.doGet(accessTokenUrl);
         System.out.println("baseMap="+baseMap);
         String openid = (String)baseMap.get("openid");
+		if(StringUtils.isBlank(openid)) {
+			return ResultFactory.buildFailResult("未获取用户授权");
+		}
         WxUser wxUser = wxUserService.findByOpenid(openid);
         if(wxUser == null) {
         	WxUser wxUserEntity = new WxUser();
@@ -199,6 +202,9 @@ public class WechatController {
 		String city = map.get("city");
 		String language = map.get("language");
 		WxUser wxUser = wxUserService.findByOpenid(openid);
+		if(StringUtils.isBlank(openid)) {
+			return ResultFactory.buildFailResult("未获取用户授权");
+		}
 		if(wxUser != null) {
 			wxUser.setNickName(nickName);
 			wxUser.setAvatarUrl(avatarUrl);
@@ -214,39 +220,55 @@ public class WechatController {
     
     //查询展示
     @GetMapping("/display")
-    public Result display(@RequestParam(value = "userId", required = true) Integer userId, HttpServletRequest request)
+    public Result display(@RequestParam(value = "openid", required = true) String openid,
+                          @RequestParam(value = "findsub", required = true) Boolean findsub, HttpServletRequest request)
             throws Exception {
-
-        List<DisplayDTO> list = listAllUser(userId,1);
-        System.out.println(list);
-        return ResultFactory.buildSuccessResult(list);
+        System.out.println("GetMapping(\"/display\"),openid:" + openid + ",findsub:" + findsub.toString());
+		if(StringUtils.isBlank(openid)) {
+			return ResultFactory.buildFailResult("未获取用户授权");
+		}
+        WxUser wxUser = wxUserService.findByOpenid(openid);
+        User user = new User();
+        if (wxUser != null) {
+            user = userService.findById(wxUser.getUserid());
+            if (user == null) {
+                return ResultFactory.buildFailResult("用户不存在");
+            }
+        } else {
+            return ResultFactory.buildFailResult("用户不存在");
+        }
+        List<DisplayDTO> list = listAllUser(user.getId(), 1, findsub);
+        if(list != null) {
+            System.out.println("GetMapping(\"/display\"),list:" + list.toString());
+            return ResultFactory.buildSuccessResult(list);
+        }
+        return ResultFactory.buildFailResult("用户不存在");
     }
 
-    List<DisplayDTO> listAllUser(Integer userId,int level) {
+    List<DisplayDTO> listAllUser(Integer userId, int level, boolean findsub) {
         User user = userService.findById(userId);
         if (user == null) {
             return null;
         } else {
-            System.out.println("level:"+level+",user.getName():"+user.getName());
             DisplayDTO displayDTO = new DisplayDTO();
             displayDTO.setUserId(user.getId());
             displayDTO.setName(user.getName());
             displayDTO.setLevel(level);
             displayDTO.setAchievementAmount(bxAchievementService.findAmountByUserId(user.getId()));
             displayDTO.setTaskAmount(bxTaskService.findAmountByUserId(user.getId()));
-            displayDTO.setdValue((displayDTO.getTaskAmount() != null ? displayDTO.getTaskAmount() :
-                    0 )- (displayDTO.getAchievementAmount()!=null?displayDTO.getAchievementAmount():0));
+            displayDTO.setdValue((displayDTO.getTaskAmount() != null ? displayDTO.getTaskAmount() : 0) -
+                    (displayDTO.getAchievementAmount() != null ? displayDTO.getAchievementAmount() : 0));
 
             List<DisplayDTO> list = new LinkedList<>();
 
             list.add(displayDTO);
             List<User> subUserList = userService.findSubUsers(user.getId());
-
-            for (User subUser : subUserList) {
-                list.addAll(listAllUser(subUser.getId(),level+1));
+            if (findsub) {
+                for (User subUser : subUserList) {
+                    list.addAll(listAllUser(subUser.getId(), level + 1, true));
+                }
             }
             return list;
-
         }
     }
     

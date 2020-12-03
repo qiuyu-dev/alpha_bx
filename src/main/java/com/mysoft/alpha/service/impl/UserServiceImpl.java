@@ -1,5 +1,6 @@
 package com.mysoft.alpha.service.impl;
 
+import com.mysoft.alpha.cache.CacheKeyManager;
 import com.mysoft.alpha.dao.AdminUserRoleDao;
 import com.mysoft.alpha.dao.AlphaSubjectDao;
 import com.mysoft.alpha.dao.UserDao;
@@ -12,6 +13,7 @@ import com.mysoft.alpha.model.RegisterForm;
 import com.mysoft.alpha.service.AdminRoleService;
 import com.mysoft.alpha.service.AdminUserRoleService;
 import com.mysoft.alpha.service.UserService;
+import com.mysoft.alpha.util.BaseCache;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
@@ -50,7 +52,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AdminUserRoleService adminUserRoleService;
-
+    /**
+     * 缓存
+     */
+    @Autowired
+    private BaseCache baseCache;
+    
     @Override
     public User findByUsername(String userName) {
         return userDao.findByUsername(userName);
@@ -248,9 +255,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Integer id) {
-        return (User)userDao.getOne(id);
+        String userId = String.format(CacheKeyManager.WECHAT_USER,id);
+        try {
+            Object cacheObj = baseCache.getOneHourCache().get(userId, () -> {
+                User user = (User)userDao.getOne(id);
+                return user;
+            });
+            if (cacheObj instanceof User) {
+                User user = (User)cacheObj;
+                return user;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-
     @Override
     public User findByUserNameAndNameAndEnabled(String userName, String name,Integer enabled) {
         return userDao.findByUsernameAndNameAndEnabled(userName, name,enabled);

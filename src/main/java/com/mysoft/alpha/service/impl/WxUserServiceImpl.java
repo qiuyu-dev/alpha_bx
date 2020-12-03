@@ -1,8 +1,11 @@
 package com.mysoft.alpha.service.impl;
 
+import com.mysoft.alpha.cache.CacheKeyManager;
 import com.mysoft.alpha.dao.WxUserDao;
 import com.mysoft.alpha.entity.WxUser;
 import com.mysoft.alpha.service.WxUserService;
+import com.mysoft.alpha.util.BaseCache;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +24,28 @@ public class WxUserServiceImpl implements WxUserService {
     @Autowired
     private WxUserDao wxUserDao;
 
+    /**
+     * 缓存
+     */
+    @Autowired
+    private BaseCache baseCache;
+
     @Override
     public WxUser findByOpenid(String openid) {
-        return wxUserDao.findByOpenid(openid);
+        String wechatWxuser = String.format(CacheKeyManager.WECHAT_WXUSER,openid);
+        try {
+            Object cacheObj = baseCache.getOneHourCache().get(wechatWxuser, () -> {
+                WxUser wxUser = wxUserDao.findByOpenid(openid);
+                return wxUser;
+            });
+            if (cacheObj instanceof WxUser) {
+                WxUser wxUser = (WxUser) cacheObj;
+                return wxUser;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

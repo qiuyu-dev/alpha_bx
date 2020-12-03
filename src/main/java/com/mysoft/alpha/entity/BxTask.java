@@ -25,8 +25,8 @@ public class BxTask implements Serializable {
     /**
      * 用户ID
      */
-    @Column(name = "userid")
-    private Integer userid;
+    @Column(name = "user_id")
+    private Integer userId;
     /**
      * 总销售任务需要完成的数量
      */
@@ -59,12 +59,12 @@ public class BxTask implements Serializable {
         this.id = id;
     }
 
-    public Integer getUserid() {
-        return userid;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getAmount() {
@@ -106,5 +106,11 @@ public class BxTask implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+	@Override
+	public String toString() {
+		return "BxTask [id=" + id + ", userId=" + userId + ", amount=" + amount + ", goodsCode=" + goodsCode
+				+ ", createTime=" + createTime + ", remark=" + remark + "]";
+	}
 
 }
