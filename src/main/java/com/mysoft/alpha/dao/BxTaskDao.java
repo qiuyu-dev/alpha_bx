@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
  */
 public interface BxTaskDao extends JpaRepository<BxTask, Integer> {
 
-    @Query(value = "SELECT SUM(amount) FROM bx.bx_task  WHERE userid = :userId ",
+    @Query(value = "SELECT SUM(amount) FROM bx.bx_task  WHERE user_id = :userId ",
            nativeQuery = true)
     Long findAmountByParamsAndSort(@Param(value = "userId") Integer userId);
 

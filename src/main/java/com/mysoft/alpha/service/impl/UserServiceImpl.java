@@ -55,8 +55,8 @@ public class UserServiceImpl implements UserService {
     /**
      * 缓存
      */
-    @Autowired
-    private BaseCache baseCache;
+//    @Autowired
+//    private BaseCache baseCache;
     
     @Override
     public User findByUsername(String userName) {
@@ -255,20 +255,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Integer id) {
-        String userId = String.format(CacheKeyManager.WECHAT_USER,id);
-        try {
-            Object cacheObj = baseCache.getOneHourCache().get(userId, () -> {
+//        String userId = String.format(CacheKeyManager.WECHAT_USER,id);
+//        try {
+//            Object cacheObj = baseCache.getOneHourCache().get(userId, () -> {
                 User user = (User)userDao.getOne(id);
                 return user;
-            });
-            if (cacheObj instanceof User) {
-                User user = (User)cacheObj;
-                return user;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+//            });
+//            if (cacheObj instanceof User) {
+//                User user = (User)cacheObj;
+//                return user;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
     @Override
     public User findByUserNameAndNameAndEnabled(String userName, String name,Integer enabled) {

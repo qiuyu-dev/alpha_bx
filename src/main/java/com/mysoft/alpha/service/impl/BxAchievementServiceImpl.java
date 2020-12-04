@@ -33,9 +33,10 @@ public class BxAchievementServiceImpl implements BxAchievementService {
     @Override
     public Long findAmountByUserId(Integer userId) {
         BxUserPromotion bxUserPromotion = bxUserPromotionDao.findByUserId(userId);
-        if(bxUserPromotion==null) {
-        	return null;
-        }       
-        return bxAchievementDao.findAmountByParamsAndSort(bxUserPromotion.getPromotionId());
+        Long amount = new Long("0");
+        if(bxUserPromotion !=null) {
+            amount = bxAchievementDao.findAmountByParamsAndSort(bxUserPromotion.getPromotionId());           
+        }
+        return amount;
     }
 }

@@ -223,4 +223,12 @@ public class WxUser implements Serializable {
         this.language = language;
     }
 
+	@Override
+	public String toString() {
+		return "WxUser [id=" + id + ", openid=" + openid + ", unionid=" + unionid + ", nickName=" + nickName
+				+ ", avatarUrl=" + avatarUrl + ", phone=" + phone + ", gender=" + gender + ", country=" + country
+				+ ", province=" + province + ", city=" + city + ", createTime=" + createTime + ", userid=" + userid
+				+ ", name=" + name + ", language=" + language + ", user=" + user + "]";
+	}
+
 }

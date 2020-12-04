@@ -27,25 +27,25 @@ public class WxUserServiceImpl implements WxUserService {
     /**
      * 缓存
      */
-    @Autowired
-    private BaseCache baseCache;
+//    @Autowired
+//    private BaseCache baseCache;
 
     @Override
     public WxUser findByOpenid(String openid) {
-        String wechatWxuser = String.format(CacheKeyManager.WECHAT_WXUSER,openid);
-        try {
-            Object cacheObj = baseCache.getOneHourCache().get(wechatWxuser, () -> {
+//        String wechatWxuser = String.format(CacheKeyManager.WECHAT_WXUSER,openid);
+//        try {
+//            Object cacheObj = baseCache.getOneHourCache().get(wechatWxuser, () -> {
                 WxUser wxUser = wxUserDao.findByOpenid(openid);
                 return wxUser;
-            });
-            if (cacheObj instanceof WxUser) {
-                WxUser wxUser = (WxUser) cacheObj;
-                return wxUser;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+//            });
+//            if (cacheObj instanceof WxUser) {
+//                WxUser wxUser = (WxUser) cacheObj;
+//                return wxUser;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     @Override

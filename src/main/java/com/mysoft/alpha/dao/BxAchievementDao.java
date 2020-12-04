@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
  */
 public interface BxAchievementDao extends JpaRepository<BxAchievement, Integer> {
 
-    @Query(value = "SELECT SUM(amount) FROM bx.bx_achievement  WHERE promotionid = :promotionId ",
+    @Query(value = "SELECT SUM(amount) FROM bx.bx_achievement  WHERE promotion_id = :promotionId ",
            nativeQuery = true)
     Long findAmountByParamsAndSort(@Param(value = "promotionId") Integer promotionId);
 

@@ -10,9 +10,9 @@ import com.mysoft.alpha.entity.BxPromotion;
  */
 public interface BxPromotionService {
 
-    BxPromotion findByUserid(Integer userid);
+    BxPromotion findByUserId(Integer userId);
 
-    BxPromotion createByUserid(Integer userid);
+    BxPromotion createByUserId(Integer userId);
 
 
 }

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,7 @@ import com.mysoft.alpha.util.HttpUtils;
 @RestController
 @RequestMapping("/api/v1/wechat")
 public class WechatController {
+	 private static final Logger log = LoggerFactory.getLogger(WechatController.class);
     @Autowired
     private WeChatConfig weChatConfig;
 
@@ -75,7 +78,9 @@ public class WechatController {
 		String city = map.get("city");
 		String language = map.get("language");
 		User user = userService.findByUserNameAndNameAndEnabled(phone, name,1);
-		System.out.println(user);
+		if(log.isInfoEnabled()) {
+			log.info(String.format("核验用户%s,%s,%s",phone,name,user));
+		};
 		if(StringUtils.isBlank(openid)) {
 			return ResultFactory.buildFailResult("未获取用户授权");
 		}
@@ -110,15 +115,15 @@ public class WechatController {
 			wxUser.setUser(user);
 			wxUser = wxUserService.updateWxUser(wxUser);
 	        //给用户分配推广URL
-	        BxPromotion bxPromotion = bxPromotionService.findByUserid(user.getId());
+	        BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
 	        //确认我方用户是否已认证
 	        if (bxPromotion == null) {
-	            bxPromotion = bxPromotionService.createByUserid(user.getId());
+	            bxPromotion = bxPromotionService.createByUserId(user.getId());
 	        }
 	        user.setBxPromotion(bxPromotion);	        
     		Long amount;
     		if(bxAchievementService.findAmountByUserId(user.getId()) != null) {
-    			amount =bxAchievementService.findAmountByUserId(user.getId());
+    			amount = bxAchievementService.findAmountByUserId(user.getId());
     			retMap.put("amount", amount);
     		}else {
         		retMap.put("amount", "0");
@@ -134,7 +139,9 @@ public class WechatController {
     	String accessTokenUrl = String.format(WeChatConfig.getAuthJscode2session(),weChatConfig.getAppId(),weChatConfig.getAppsecret(),code);
         //获取access_token
         Map<String ,Object> baseMap =  HttpUtils.doGet(accessTokenUrl);
-        System.out.println("baseMap="+baseMap);
+		if(log.isInfoEnabled()) {
+			log.info(String.format("%s",baseMap));
+		};
         String openid = (String)baseMap.get("openid");
 		if(StringUtils.isBlank(openid)) {
 			return ResultFactory.buildFailResult("未获取用户授权");
@@ -157,7 +164,7 @@ public class WechatController {
                 User user = userService.findById(wxUser.getUserid());
                 //确认是否有我方用户
                 if (user != null) {            	
-                    BxPromotion bxPromotion = bxPromotionService.findByUserid(user.getId());
+                    BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
                     //确认我方用户是否已认证
                     if (bxPromotion != null && user.getEnabled().intValue() == 1) {
                         user.setBxPromotion(bxPromotion);
@@ -172,16 +179,15 @@ public class WechatController {
     @GetMapping("/getAmount")
     public Result getAmount(@RequestParam(value = "openid",required = true)String openid, HttpServletResponse response) throws Exception {
     	Map<String, Object> retMap = new HashMap<String,Object>();    	
-    	WxUser wxUser = wxUserService.findByOpenid(openid);		
+    	WxUser wxUser = wxUserService.findByOpenid(openid);	
+		if(StringUtils.isBlank(openid)) {
+			return ResultFactory.buildFailResult("未获取用户授权");
+		}
     	if(wxUser !=null) {    		
     		User user = userService.findById(wxUser.getUserid());
     		if(user != null) {
-        		Long amount;
-        		if(bxAchievementService.findAmountByUserId(user.getId()) != null) {
-        			amount =bxAchievementService.findAmountByUserId(user.getId());
-        			retMap.put("amount", amount);
-        		}
-        		retMap.put("amount", 0);
+        		Long amount = bxAchievementService.findAmountByUserId(user.getId());
+        		retMap.put("amount", amount);
     		}else {
     			retMap.put("amount", 0);
     		}

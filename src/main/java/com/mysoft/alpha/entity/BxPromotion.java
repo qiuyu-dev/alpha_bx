@@ -180,6 +180,7 @@ public class BxPromotion implements Serializable {
         this.remark = remark;
     }
 
+
 	@Override
 	public String toString() {
 		return "BxPromotion [id=" + id + ", channel=" + channel + ", ch=" + ch + ", productCode=" + productCode
