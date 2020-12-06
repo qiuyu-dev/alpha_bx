@@ -1,6 +1,8 @@
 package com.mysoft.alpha.dao;
 
 import com.mysoft.alpha.entity.BxPromotion;
+import com.mysoft.alpha.entity.BxUserPromotion;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,5 +18,6 @@ public interface BxPromotionDao extends JpaRepository<BxPromotion, Integer> {
 
     BxPromotion findFirstByStatusAndIdNotIn(Integer status, List<Integer> idList);
     BxPromotion findFirstByStatus(Integer status);
+    List<BxPromotion> findByStatus(Integer status);
 
 }

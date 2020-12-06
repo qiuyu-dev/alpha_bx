@@ -11,6 +11,11 @@ public class AlphaConfig {
 	private String uploadFolder;
 	@Value("${alpha.upload.file.url:http://localhost:8443/api/file/}")
 	private String fileUrl;
+	@Value("${server.port}")
+	private int port;
+	
+	@Value("${http.port}")
+	private int httpPort;
 	
 	public String getUploadFolder() {
 		return uploadFolder;
@@ -26,6 +31,22 @@ public class AlphaConfig {
 
 	public void setFileUrl(String fileUrl) {
 		this.fileUrl = fileUrl;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public int getHttpPort() {
+		return httpPort;
+	}
+
+	public void setHttpPort(int httpPort) {
+		this.httpPort = httpPort;
 	}	
 
 }

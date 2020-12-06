@@ -1,9 +1,10 @@
 package com.mysoft.alpha.dao;
 
-import com.mysoft.alpha.entity.BxUserPromotion;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.mysoft.alpha.entity.BxUserPromotion;
 
 
 /**
@@ -16,7 +17,8 @@ public interface BxUserPromotionDao extends JpaRepository<BxUserPromotion, Integ
 
     BxUserPromotion findByUserId(Integer userid);
 
-    List<BxUserPromotion> findAllByUserIdIsNotNull();
+    List<BxUserPromotion> findAllByUserIdIsNotNull();   
+
 
 
 

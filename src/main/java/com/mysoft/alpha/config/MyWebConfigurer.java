@@ -29,20 +29,20 @@ public class MyWebConfigurer implements WebMvcConfigurer {
      */
     @Bean
     public ConfigurableServletWebServerFactory webServerFactory() {
-    	TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-//        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory() {
-// 
-//            @Override
-//            protected void postProcessContext(Context context) { 
-//                SecurityConstraint securityConstraint = new SecurityConstraint();
-//                securityConstraint.setUserConstraint("CONFIDENTIAL");
-//                SecurityCollection collection = new SecurityCollection();
-//                collection.addPattern("/*");
-//                securityConstraint.addCollection(collection);
-//                context.addConstraint(securityConstraint);
-//            }
-//        };
-//        factory.addAdditionalTomcatConnectors(initiateHttpConnector());
+//    	TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory() {
+ 
+            @Override
+            protected void postProcessContext(Context context) { 
+                SecurityConstraint securityConstraint = new SecurityConstraint();
+                securityConstraint.setUserConstraint("CONFIDENTIAL");
+                SecurityCollection collection = new SecurityCollection();
+                collection.addPattern("/*");
+                securityConstraint.addCollection(collection);
+                context.addConstraint(securityConstraint);
+            }
+        };
+        factory.addAdditionalTomcatConnectors(initiateHttpConnector());
         
         factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
             @Override
@@ -81,9 +81,9 @@ public class MyWebConfigurer implements WebMvcConfigurer {
     private Connector initiateHttpConnector() {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
         connector.setScheme("http");
-        connector.setPort(8088); // http端口
+        connector.setPort(alphaConfig.getHttpPort()); // http端口
         connector.setSecure(false);
-        connector.setRedirectPort(8443); // application.properties中配置的https端口
+        connector.setRedirectPort(alphaConfig.getPort()); // application.properties中配置的https端口
         return connector;
     }    
 

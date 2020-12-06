@@ -30,10 +30,14 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
  *
  */
 public class QRCodeUtil {
+    public static final String QRCODE_FILENAME = "qrcode.png";
+    
     private static final String CHARSET = "utf-8";
-    private static final String FORMAT = "JPG";
+    
+    private static final String FORMAT = "PNG";
+    
     // 二维码尺寸
-    private static final int QRCODE_SIZE = 300;
+    private static final int QRCODE_SIZE = 100;
     // LOGO宽度
     private static final int LOGO_WIDTH = 60;
     // LOGO高度

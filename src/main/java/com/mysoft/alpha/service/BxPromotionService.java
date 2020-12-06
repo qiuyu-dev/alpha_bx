@@ -1,5 +1,7 @@
 package com.mysoft.alpha.service;
 
+import java.util.List;
+
 import com.mysoft.alpha.entity.BxPromotion;
 
 /**
@@ -13,6 +15,10 @@ public interface BxPromotionService {
     BxPromotion findByUserId(Integer userId);
 
     BxPromotion createByUserId(Integer userId);
+    
+    BxPromotion getOneByPromotionId(Integer promotionId);
+    
+    List<BxPromotion> findByStatus(Integer status);
 
 
 }

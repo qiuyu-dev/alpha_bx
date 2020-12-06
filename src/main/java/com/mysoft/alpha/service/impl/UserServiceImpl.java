@@ -25,6 +25,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -258,7 +259,11 @@ public class UserServiceImpl implements UserService {
 //        String userId = String.format(CacheKeyManager.WECHAT_USER,id);
 //        try {
 //            Object cacheObj = baseCache.getOneHourCache().get(userId, () -> {
-                User user = (User)userDao.getOne(id);
+                User user  = null;
+                Optional<User> optional =  userDao.findById(id);
+                if ( optional != null && optional.isPresent()) {
+                	user = optional.get();
+                }
                 return user;
 //            });
 //            if (cacheObj instanceof User) {

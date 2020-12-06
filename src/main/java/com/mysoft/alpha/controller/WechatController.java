@@ -1,5 +1,6 @@
 package com.mysoft.alpha.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,6 +32,7 @@ import com.mysoft.alpha.service.BxTaskService;
 import com.mysoft.alpha.service.UserService;
 import com.mysoft.alpha.service.WxUserService;
 import com.mysoft.alpha.util.HttpUtils;
+import com.mysoft.alpha.util.QRCodeUtil;
 
 @RestController
 @RequestMapping("/api/v1/wechat")
@@ -85,21 +87,22 @@ public class WechatController {
 			return ResultFactory.buildFailResult("未获取用户授权");
 		}
 		WxUser wxUser = wxUserService.findByOpenid(openid);
-        if (wxUser == null) {        	
+        if (wxUser == null) {
+        	return ResultFactory.buildFailResult("未获取用户授权");
                 //我方微信用户信息未知则保存
-                WxUser wxUserEntity = new WxUser();
-                wxUserEntity.setOpenid(openid);
-                wxUserEntity.setPhone(phone);
-                wxUserEntity.setName(name);
-                wxUserEntity.setNickName(nickName);
-                wxUserEntity.setAvatarUrl(avatarUrl);
-               	wxUserEntity.setGender(gender != null?Integer.parseInt(gender):0);                       
-                wxUserEntity.setCountry(country);
-                wxUserEntity.setProvince(province);
-                wxUserEntity.setCity(city);
-                wxUserEntity.setLanguage(language);
-    			wxUserEntity.setCreateTime(new Date());
-                wxUserService.createWxUser(wxUserEntity);
+//                WxUser wxUserEntity = new WxUser();
+//                wxUserEntity.setOpenid(openid);
+//                wxUserEntity.setPhone(phone);
+//                wxUserEntity.setName(name);
+//                wxUserEntity.setNickName(nickName);
+//                wxUserEntity.setAvatarUrl(avatarUrl);
+//                wxUserEntity.setGender(gender != null?Integer.parseInt(gender):0);                       
+//                wxUserEntity.setCountry(country);
+//                wxUserEntity.setProvince(province);
+//                wxUserEntity.setCity(city);
+//                wxUserEntity.setLanguage(language);
+//    			   wxUserEntity.setCreateTime(new Date());
+//                wxUserService.createWxUser(wxUserEntity);
         	
         }else if(user != null && wxUser != null) {
 			wxUser.setUserid(user.getId());//存入userid
@@ -278,4 +281,40 @@ public class WechatController {
         }
     }
     
+    
+  //生成二维码
+    @GetMapping("/qrimage")
+    public Result qrimage(@RequestParam(value = "promotionId", required = true) Integer promotionId,
+                          HttpServletRequest request) throws Exception {
+        System.out.println("GetMapping(\"/qrimage\"),promotionId:" + promotionId);
+        List<BxPromotion> promotionList = new ArrayList<BxPromotion>();
+        if (promotionId.intValue() == 0) {
+            promotionList = bxPromotionService.findByStatus(1);
+        } else {
+            if (bxPromotionService.getOneByPromotionId(promotionId) != null) {
+                promotionList.add(bxPromotionService.getOneByPromotionId(promotionId));
+            }
+        }
+        if (promotionList.size() < 1) {
+            return ResultFactory.buildFailResult("保险推广URL不存在");
+        } else {
+            String destPath = Class.class.getClass().getResource("/").getPath();
+//            System.out.println("destPath:"+destPath);
+            System.out.println("dir:"+System.getProperty("user.dir"));//user.dir指定了当前的路径
+            System.out.println("Class:"+Class.class.getClass().getResource("/").getPath());
+//            System.out.println("request.getSession:"+request.getSession().getServletContext().getRealPath(""));
+//            System.out.println("request.getContextPath:"+request.getContextPath());
+//            File directory = new File("");//设定为当前文件夹
+//            System.out.println("File.getCanonicalPath:"+directory.getCanonicalPath());//获取标准的路径
+//                System.out.println("File.getAbsolutePath:"+directory.getAbsolutePath());//获取绝对路径
+
+            for (BxPromotion bxPromotion : promotionList) {
+
+                QRCodeUtil.encode(bxPromotion.getUrl(), null,
+                        destPath + "/static/" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME, true);
+            }
+
+        }
+        return ResultFactory.buildSuccessResult("生成保险推广URL二维码成功,共计：" + promotionList.size() + "个。");
+    }
 }
