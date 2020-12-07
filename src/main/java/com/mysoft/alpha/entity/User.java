@@ -30,6 +30,18 @@ public class User implements Serializable {
 
     @Column(name = "sup_userid")
     private Integer supUserid;
+    
+    /**
+     * 单位，所属团队
+     */
+    @Column(name = "team")
+    private String team;
+    
+    /**
+     * 职位
+     */
+    @Column(name = "post")
+    private String post;
     /**
      * 账户名，验证，唯一
      */
@@ -215,7 +227,23 @@ public class User implements Serializable {
         this.supUserid = supUserid;
     }
 
-    public BxPromotion getBxPromotion() {
+    public String getTeam() {
+		return team;
+	}
+
+	public void setTeam(String team) {
+		this.team = team;
+	}
+
+	public String getPost() {
+		return post;
+	}
+
+	public void setPost(String post) {
+		this.post = post;
+	}
+
+	public BxPromotion getBxPromotion() {
         return bxPromotion;
     }
 
@@ -233,11 +261,14 @@ public class User implements Serializable {
         sb.append(", name='").append(name).append('\'');
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", email='").append(email).append('\'');
-        sb.append(", alphaSubjectId=").append(alphaSubjectId);
-        sb.append(", enabled=").append(enabled);
+        sb.append(", alphaSubjectId=").append(alphaSubjectId).append('\'');;
+        sb.append(", enabled=").append(enabled).append('\'');;
         sb.append(", operator='").append(operator).append('\'');
-        sb.append(", createTime=").append(createTime);
-        sb.append(", alphaSubject=").append(alphaSubject);
+        sb.append(", createTime=").append(createTime).append('\'');;
+        sb.append(", post=").append(post).append('\'');
+        sb.append(", team=").append(team).append('\'');
+        sb.append(", supUserid=").append(supUserid).append('\'');
+        sb.append(", alphaSubject=").append(alphaSubject).append('\'');
         sb.append(", roles=").append(roles);
         sb.append('}');
         return sb.toString();

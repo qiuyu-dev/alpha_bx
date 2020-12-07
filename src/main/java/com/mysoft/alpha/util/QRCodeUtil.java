@@ -30,12 +30,12 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
  *
  */
 public class QRCodeUtil {
+	//二维码文件名
     public static final String QRCODE_FILENAME = "qrcode.png";
-    
+    //字符集
     private static final String CHARSET = "utf-8";
-    
-    private static final String FORMAT = "PNG";
-    
+    //二维码格式
+    private static final String FORMAT = "PNG";    
     // 二维码尺寸
     private static final int QRCODE_SIZE = 100;
     // LOGO宽度
@@ -153,6 +153,9 @@ public class QRCodeUtil {
         mkdirs(destPath);
         fileName = fileName.substring(0, fileName.indexOf(".")>0?fileName.indexOf("."):fileName.length())
                 + "." + FORMAT.toLowerCase();
+        if(destPath.endsWith("/")) {
+        	destPath = destPath.substring(0,destPath.length()-1);
+        }
         ImageIO.write(image, FORMAT, new File(destPath + "/" + fileName));
         return fileName;
     }

@@ -31,6 +31,8 @@ public interface UserService {
     User findById(Integer id);
 
     User findByUserNameAndNameAndEnabled(String userName, String name,Integer enabled);
+    
+    User findByUserNameAndEnabled(String userName,Integer enabled);
 
     List<User> findSubUsers(Integer userId);
 

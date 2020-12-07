@@ -279,6 +279,11 @@ public class UserServiceImpl implements UserService {
     public User findByUserNameAndNameAndEnabled(String userName, String name,Integer enabled) {
         return userDao.findByUsernameAndNameAndEnabled(userName, name,enabled);
     }
+    
+    @Override
+    public User findByUserNameAndEnabled(String userName, Integer enabled) {
+        return userDao.findByUsernameAndEnabled(userName, enabled);
+    }
 
 
     @Override

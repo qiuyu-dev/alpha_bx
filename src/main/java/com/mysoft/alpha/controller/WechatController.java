@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysoft.alpha.config.AlphaConfig;
 import com.mysoft.alpha.config.WeChatConfig;
 import com.mysoft.alpha.dto.DisplayDTO;
 import com.mysoft.alpha.entity.BxPromotion;
@@ -40,6 +41,8 @@ public class WechatController {
 	 private static final Logger log = LoggerFactory.getLogger(WechatController.class);
     @Autowired
     private WeChatConfig weChatConfig;
+    @Autowired
+    private AlphaConfig alphaConfig;
 
     @Autowired
     private UserService userService;
@@ -78,18 +81,21 @@ public class WechatController {
 		String country = map.get("country");
 		String province = map.get("province");
 		String city = map.get("city");
-		String language = map.get("language");
-		User user = userService.findByUserNameAndNameAndEnabled(phone, name,1);
+		String language = map.get("language");		
+		User user = userService.findByUserNameAndEnabled(phone,1);
 		if(log.isInfoEnabled()) {
-			log.info(String.format("核验用户%s,%s,%s",phone,name,user));
-		};
-		if(StringUtils.isBlank(openid)) {
-			return ResultFactory.buildFailResult("未获取用户授权");
+			log.info(String.format("核验用户%s,%s",phone,user));
 		}
-		WxUser wxUser = wxUserService.findByOpenid(openid);
-        if (wxUser == null) {
-        	return ResultFactory.buildFailResult("未获取用户授权");
-                //我方微信用户信息未知则保存
+		if(user == null) {
+			return ResultFactory.buildFailResult("请联系您的主管提交您的销售信息给我们");
+		} else {
+			if (StringUtils.isBlank(openid)) {
+				return ResultFactory.buildFailResult("参数openid为空");
+			}
+			WxUser wxUser = wxUserService.findByOpenid(openid);
+			if (wxUser == null) {
+				return ResultFactory.buildFailResult("微信用户不存在或参数openid错误");
+				// 我方微信用户信息未知则保存
 //                WxUser wxUserEntity = new WxUser();
 //                wxUserEntity.setOpenid(openid);
 //                wxUserEntity.setPhone(phone);
@@ -103,39 +109,70 @@ public class WechatController {
 //                wxUserEntity.setLanguage(language);
 //    			   wxUserEntity.setCreateTime(new Date());
 //                wxUserService.createWxUser(wxUserEntity);
-        	
-        }else if(user != null && wxUser != null) {
-			wxUser.setUserid(user.getId());//存入userid
-			wxUser.setPhone(phone);
-			wxUser.setName(name);
-			wxUser.setNickName(nickName);
-			wxUser.setAvatarUrl(avatarUrl);
-			wxUser.setGender(gender != null?Integer.parseInt(gender):0);
-			wxUser.setCountry(country);
-			wxUser.setProvince(province);
-			wxUser.setCity(city);
-			wxUser.setLanguage(language);			
-			wxUser.setUser(user);
-			wxUser = wxUserService.updateWxUser(wxUser);
-	        //给用户分配推广URL
-	        BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
-	        //确认我方用户是否已认证
-	        if (bxPromotion == null) {
-	            bxPromotion = bxPromotionService.createByUserId(user.getId());
-	        }
-	        user.setBxPromotion(bxPromotion);	        
-    		Long amount;
-    		if(bxAchievementService.findAmountByUserId(user.getId()) != null) {
-    			amount = bxAchievementService.findAmountByUserId(user.getId());
-    			retMap.put("amount", amount);
-    		}else {
-        		retMap.put("amount", "0");
-    		}
-		}else {
-			return ResultFactory.buildFailResult("用户不存在");
+
+			} else if (user != null && wxUser != null) {
+				wxUser.setUserid(user.getId());// 存入userid
+				wxUser.setPhone(phone);
+				wxUser.setName(name);
+				wxUser.setNickName(nickName);
+				wxUser.setAvatarUrl(avatarUrl);
+				wxUser.setGender(gender != null ? Integer.parseInt(gender) : 0);
+				wxUser.setCountry(country);
+				wxUser.setProvince(province);
+				wxUser.setCity(city);
+				wxUser.setLanguage(language);
+				wxUser.setUser(user);
+				wxUser = wxUserService.updateWxUser(wxUser);
+				// 给用户分配推广URL
+				BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
+				// 确认我方用户是否已认证
+				if (bxPromotion == null) {
+					bxPromotion = bxPromotionService.createByUserId(user.getId());
+				}
+				user.setBxPromotion(bxPromotion);
+				Long amount;
+				if (bxAchievementService.findAmountByUserId(user.getId()) != null) {
+					amount = bxAchievementService.findAmountByUserId(user.getId());
+					retMap.put("amount", amount);
+				} else {
+					retMap.put("amount", Long.valueOf(0));
+				}
+				retMap.put("name", user.getName());
+				retMap.put("phone", user.getPhone());
+				retMap.put("team", user.getTeam());
+			} else {
+				return ResultFactory.buildFailResult("用户不存在");
+			}
 		}
 		return ResultFactory.buildSuccessResult(retMap);
 	}    
+	
+	@GetMapping("/getUser")
+    public Result getUser(@RequestParam(value = "openid", required = true) String openid, HttpServletResponse response)
+            throws Exception {
+        WxUser wxUser = wxUserService.findByOpenid(openid);
+        if (wxUser == null) {
+            return ResultFactory.buildFailResult("微信用户不存在或参数openid错误");
+        } else {
+            if (wxUser.getUserid() != null) {
+                User user = userService.findById(wxUser.getUserid());
+                //确认是否有我方用户
+                if (user != null) {
+                    BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
+                    //确认我方用户是否已认证
+                    if (bxPromotion != null && user.getEnabled().intValue() == 1) {
+                        user.setBxPromotion(bxPromotion);
+                    }
+                    wxUser.setUser(user);
+                }
+            }
+        }
+        if(log.isInfoEnabled()) {
+        	log.info(String.format("GetMapping(\"/getUser\"),openid:%s, wxUser:%s",openid, wxUser.toString()));
+        }
+
+        return ResultFactory.buildSuccessResult(wxUser);
+    }	
 	
     @GetMapping("/wxlogin")
     public Result wxlogin(@RequestParam(value = "code",required = true)String code, HttpServletResponse response) throws Exception {
@@ -147,7 +184,7 @@ public class WechatController {
 		};
         String openid = (String)baseMap.get("openid");
 		if(StringUtils.isBlank(openid)) {
-			return ResultFactory.buildFailResult("未获取用户授权");
+			return ResultFactory.buildFailResult("参数openid为空");
 		}
         WxUser wxUser = wxUserService.findByOpenid(openid);
         if(wxUser == null) {
@@ -182,10 +219,10 @@ public class WechatController {
     @GetMapping("/getAmount")
     public Result getAmount(@RequestParam(value = "openid",required = true)String openid, HttpServletResponse response) throws Exception {
     	Map<String, Object> retMap = new HashMap<String,Object>();    	
-    	WxUser wxUser = wxUserService.findByOpenid(openid);	
 		if(StringUtils.isBlank(openid)) {
-			return ResultFactory.buildFailResult("未获取用户授权");
+			return ResultFactory.buildFailResult("参数openid为空");
 		}
+    	WxUser wxUser = wxUserService.findByOpenid(openid);
     	if(wxUser !=null) {    		
     		User user = userService.findById(wxUser.getUserid());
     		if(user != null) {
@@ -212,7 +249,7 @@ public class WechatController {
 		String language = map.get("language");
 		WxUser wxUser = wxUserService.findByOpenid(openid);
 		if(StringUtils.isBlank(openid)) {
-			return ResultFactory.buildFailResult("未获取用户授权");
+			return ResultFactory.buildFailResult("参数openid为空");
 		}
 		if(wxUser != null) {
 			wxUser.setNickName(nickName);
@@ -232,9 +269,8 @@ public class WechatController {
     public Result display(@RequestParam(value = "openid", required = true) String openid,
                           @RequestParam(value = "findsub", required = true) Boolean findsub, HttpServletRequest request)
             throws Exception {
-        System.out.println("GetMapping(\"/display\"),openid:" + openid + ",findsub:" + findsub.toString());
 		if(StringUtils.isBlank(openid)) {
-			return ResultFactory.buildFailResult("未获取用户授权");
+			return ResultFactory.buildFailResult("参数openid为空");
 		}
         WxUser wxUser = wxUserService.findByOpenid(openid);
         User user = new User();
@@ -248,7 +284,9 @@ public class WechatController {
         }
         List<DisplayDTO> list = listAllUser(user.getId(), 1, findsub);
         if(list != null) {
-            System.out.println("GetMapping(\"/display\"),list:" + list.toString());
+        	if(log.isInfoEnabled()) {
+               log.info(String.format("GetMapping(\"/display\"),openid:%s,findsub:%s,list:%s", openid, findsub, list.toString()));
+        	}
             return ResultFactory.buildSuccessResult(list);
         }
         return ResultFactory.buildFailResult("用户不存在");
@@ -267,7 +305,9 @@ public class WechatController {
             displayDTO.setTaskAmount(bxTaskService.findAmountByUserId(user.getId()));
             displayDTO.setdValue((displayDTO.getTaskAmount() != null ? displayDTO.getTaskAmount() : 0) -
                     (displayDTO.getAchievementAmount() != null ? displayDTO.getAchievementAmount() : 0));
-
+            if(displayDTO.getdValue()<0) {//负数设置成0
+            	displayDTO.setdValue(Long.valueOf(0));
+            }
             List<DisplayDTO> list = new LinkedList<>();
 
             list.add(displayDTO);
@@ -286,7 +326,6 @@ public class WechatController {
     @GetMapping("/qrimage")
     public Result qrimage(@RequestParam(value = "promotionId", required = true) Integer promotionId,
                           HttpServletRequest request) throws Exception {
-        System.out.println("GetMapping(\"/qrimage\"),promotionId:" + promotionId);
         List<BxPromotion> promotionList = new ArrayList<BxPromotion>();
         if (promotionId.intValue() == 0) {
             promotionList = bxPromotionService.findByStatus(1);
@@ -298,10 +337,10 @@ public class WechatController {
         if (promotionList.size() < 1) {
             return ResultFactory.buildFailResult("保险推广URL不存在");
         } else {
-            String destPath = Class.class.getClass().getResource("/").getPath();
+            String destPath = alphaConfig.getUploadFolder();
 //            System.out.println("destPath:"+destPath);
-            System.out.println("dir:"+System.getProperty("user.dir"));//user.dir指定了当前的路径
-            System.out.println("Class:"+Class.class.getClass().getResource("/").getPath());
+//            System.out.println("dir:"+System.getProperty("user.dir"));//user.dir指定了当前的路径
+//            System.out.println("Class:"+Class.class.getClass().getResource("/").getPath());
 //            System.out.println("request.getSession:"+request.getSession().getServletContext().getRealPath(""));
 //            System.out.println("request.getContextPath:"+request.getContextPath());
 //            File directory = new File("");//设定为当前文件夹
@@ -309,11 +348,14 @@ public class WechatController {
 //                System.out.println("File.getAbsolutePath:"+directory.getAbsolutePath());//获取绝对路径
 
             for (BxPromotion bxPromotion : promotionList) {
-
+            	
                 QRCodeUtil.encode(bxPromotion.getUrl(), null,
-                        destPath + "/static/" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME, true);
+                        destPath + "qrcode" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME, true);
             }
 
+        }
+        if(log.isInfoEnabled()) {
+        	log.info(String.format("GetMapping(\"/qrimage\"),promotionId:%s,共计:%s", promotionId,promotionList.size()));
         }
         return ResultFactory.buildSuccessResult("生成保险推广URL二维码成功,共计：" + promotionList.size() + "个。");
     }

@@ -22,10 +22,10 @@
          </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="info">
+         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="fileLog"/>
             <AppenderRef ref="RollingFileInfo"/>
-        </Root>
+        </Root>    
     </Loggers>
 </Configuration>
