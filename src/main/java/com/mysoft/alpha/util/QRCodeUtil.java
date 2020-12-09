@@ -37,11 +37,11 @@ public class QRCodeUtil {
     //二维码格式
     private static final String FORMAT = "PNG";    
     // 二维码尺寸
-    private static final int QRCODE_SIZE = 100;
+    private static final int QRCODE_SIZE = 300;
     // LOGO宽度
-    private static final int LOGO_WIDTH = 60;
+    private static final int LOGO_WIDTH = 100;
     // LOGO高度
-    private static final int LOGO_HEIGHT = 60;
+    private static final int LOGO_HEIGHT = 100;
 
     private static BufferedImage createImage(String content, String logoPath, boolean needCompress) throws Exception {
         Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
@@ -285,13 +285,17 @@ public class QRCodeUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        String text = "https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=2_1";
+//    	String text = "https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=2_1";
+    	String text = "https://h5.zkydib.com/datamark?bxtfcode=SEFToctEzrw&__pl__=360010001";
         //不含Logo
-        //QRCodeUtil.encode(text, null, "e:\\", true);
+        QRCodeUtil.encode(text, null, "e:\\","qrcodeNew400.png", true);
+        QRCodeUtil.encode("https://h5.360huiminbao.cn/datamark?bxtfcode=eSIXwAVFvOI&__pl__=", null, "e:\\","qrcodeOld400.png", true);
+ 
+        
         //含Logo，不指定二维码图片名
         //QRCodeUtil.encode(text, "e:\\csdn.jpg", "e:\\", true);
         //含Logo，指定二维码图片名
 //        QRCodeUtil.encode(text, "d:\\alpha.jpg", "d:\\", "qrcode", true);
-        System.out.println(QRCodeUtil.decode("d:\\qrcode.jpg"));
+//        System.out.println(QRCodeUtil.decode("e:\\qrcode.png"));
     }
 }

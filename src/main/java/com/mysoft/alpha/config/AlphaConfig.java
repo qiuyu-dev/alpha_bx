@@ -11,10 +11,10 @@ public class AlphaConfig {
 	private String uploadFolder;
 	@Value("${alpha.upload.file.url:http://localhost:8443/api/file/}")
 	private String fileUrl;
-	@Value("${server.port}")
+	@Value("${server.port:8443}")
 	private int port;
 	
-	@Value("${http.port}")
+	@Value("${http.port:8080}")
 	private int httpPort;
 	
 	public String getUploadFolder() {

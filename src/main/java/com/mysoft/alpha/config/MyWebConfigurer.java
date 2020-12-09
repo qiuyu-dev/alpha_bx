@@ -9,7 +9,6 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -29,8 +28,8 @@ public class MyWebConfigurer implements WebMvcConfigurer {
      */
     @Bean
     public ConfigurableServletWebServerFactory webServerFactory() {
-//    	TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory() {
+//    	TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
  
             @Override
             protected void postProcessContext(Context context) { 
@@ -42,35 +41,17 @@ public class MyWebConfigurer implements WebMvcConfigurer {
                 context.addConstraint(securityConstraint);
             }
         };
-        factory.addAdditionalTomcatConnectors(initiateHttpConnector());
+        tomcat.addAdditionalTomcatConnectors(initiateHttpConnector());
         
-        factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
+        tomcat.addConnectorCustomizers(new TomcatConnectorCustomizer() {
             @Override
             public void customize(Connector connector) {
-                connector.setProperty("relaxedQueryChars", "|{}[]");
+            	connector.setProperty("relaxedPathChars", "\"<>[\\]^`{|}");
+                connector.setProperty("relaxedQueryChars", "\"<>[\\]^`{|}");
             }
         });
-        return factory;
+        return tomcat;
     }
-    
-//    @Bean
-//    public ServletWebServerFactory servletContainer() {
-// 
-//    	TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
-// 
-//            @Override
-//            protected void postProcessContext(Context context) { 
-//                SecurityConstraint securityConstraint = new SecurityConstraint();
-//                securityConstraint.setUserConstraint("CONFIDENTIAL");
-//                SecurityCollection collection = new SecurityCollection();
-//                collection.addPattern("/*");
-//                securityConstraint.addCollection(collection);
-//                context.addConstraint(securityConstraint);
-//            }
-//        };
-//        tomcat.addAdditionalTomcatConnectors(initiateHttpConnector());
-//        return tomcat;
-//    }
  
     /**
      * 让我们的应用支持HTTP是个好想法，但是需要重定向到HTTPS，
