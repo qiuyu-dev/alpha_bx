@@ -338,14 +338,6 @@ public class WechatController {
             return ResultFactory.buildFailResult("保险推广URL不存在");
         } else {
             String destPath = alphaConfig.getUploadFolder();
-//            System.out.println("destPath:"+destPath);
-//            System.out.println("dir:"+System.getProperty("user.dir"));//user.dir指定了当前的路径
-//            System.out.println("Class:"+Class.class.getClass().getResource("/").getPath());
-//            System.out.println("request.getSession:"+request.getSession().getServletContext().getRealPath(""));
-//            System.out.println("request.getContextPath:"+request.getContextPath());
-//            File directory = new File("");//设定为当前文件夹
-//            System.out.println("File.getCanonicalPath:"+directory.getCanonicalPath());//获取标准的路径
-//                System.out.println("File.getAbsolutePath:"+directory.getAbsolutePath());//获取绝对路径
 
             for (BxPromotion bxPromotion : promotionList) {
             	
@@ -355,8 +347,38 @@ public class WechatController {
 
         }
         if(log.isInfoEnabled()) {
-        	log.info(String.format("GetMapping(\"/qrimage\"),promotionId:%s,共计:%s", promotionId,promotionList.size()));
+        	log.info(String.format(request.getRequestURI() +",promotionId:%s,共计:%s", promotionId,promotionList.size()));
         }
         return ResultFactory.buildSuccessResult("生成保险推广URL二维码成功,共计：" + promotionList.size() + "个。");
     }
+    
+    //通过二维码图片链接生成
+    @GetMapping("/genQRCodeUrl")
+    public Result genQRCodeUrl(@RequestParam(value = "promotionId", required = true) Integer promotionId,
+                          HttpServletRequest request) throws Exception {
+        List<BxPromotion> promotionList = new ArrayList<BxPromotion>();
+        if (promotionId.intValue() == 0) {
+            promotionList = bxPromotionService.findByStatus(1);
+        } else {
+            if (bxPromotionService.getOneByPromotionId(promotionId) != null) {
+                promotionList.add(bxPromotionService.getOneByPromotionId(promotionId));
+            }
+        }
+        if (promotionList.size() < 1) {
+            return ResultFactory.buildFailResult("二维码图片链接URL不存在");
+        } else {
+            String destPath = alphaConfig.getUploadFolder();
+
+            for (BxPromotion bxPromotion : promotionList) {
+            	
+                QRCodeUtil.genQRCode(bxPromotion.getUrl(), 
+                        destPath + "qrcode" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME);
+            }
+
+        }
+        if(log.isInfoEnabled()) {
+        	log.info(String.format(request.getRequestURI() +",promotionId:%s,共计:%s", promotionId,promotionList.size()));
+        }
+        return ResultFactory.buildSuccessResult("生成图片链接二维码成功,共计：" + promotionList.size() + "个。");
+    }    
 }

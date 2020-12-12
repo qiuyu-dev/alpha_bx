@@ -8,10 +8,16 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -283,15 +289,60 @@ public class QRCodeUtil {
     public static String decode(String path) throws Exception {
         return QRCodeUtil.decode(new File(path));
     }
+    
+    /**
+     * 直接保存二维码图片
+     * @param url 二维码图片url
+     * @param destPath 存储路径
+     * @param fileName 文件名
+     * @return 图片存储地址
+     */
+    public static String genQRCode(String url,String destPath, String fileName)   throws Exception {
+    	CloseableHttpClient httpClient =  HttpClients.createDefault();
+    	String genFilePath = "";
+        try{
+			mkdirs(destPath);
+			HttpGet httpGet = new HttpGet(url);
+			CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+			if (httpResponse.getStatusLine().getStatusCode() == 200) {
+				String contentType = httpResponse.getFirstHeader("content-type").getValue();
+				if (contentType.startsWith("image")) {
+					if (destPath.endsWith("/")) {
+						destPath = destPath.substring(0, destPath.length() - 1);
+					}
+					genFilePath = destPath + "/" + fileName;
+					System.out.println(genFilePath);
+					URL input = new URL(url);
+					BufferedImage image = ImageIO.read(input);
+					ImageIO.write(image, FORMAT, new File(genFilePath));
+				} else {
+					System.out.println("传入非图片链接:" + url);
+				}
+				return genFilePath;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				httpClient.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+    }
 
     public static void main(String[] args) throws Exception {
 //    	String text = "https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=2_1";
-    	String text = "https://h5.zkydib.com/datamark?bxtfcode=SEFToctEzrw&__pl__=360010001";
+//    	String text = "https://h5.zkydib.com/datamark?bxtfcode=SEFToctEzrw&__pl__=360010001";
         //不含Logo
-        QRCodeUtil.encode(text, null, "e:\\","qrcodeNew400.png", true);
-        QRCodeUtil.encode("https://h5.360huiminbao.cn/datamark?bxtfcode=eSIXwAVFvOI&__pl__=", null, "e:\\","qrcodeOld400.png", true);
- 
-        
+//        QRCodeUtil.encode(text, null, "e:\\","qrcodeNew400.png", true);
+//        QRCodeUtil.encode("https://h5.360huiminbao.cn/datamark?bxtfcode=eSIXwAVFvOI&__pl__=", null, "e:\\","qrcodeOld400.png", true);
+        String url = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQGI8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyMl9aZGNOeUxkS0UxMDAwMHcwN28AAgT6gNFfAwQAAAAA";
+        String url2="https://h5.360huiminbao.cn/datamark?bxtfcode=l2TwglEB6xE&__pl__=";
+        String pathString = QRCodeUtil.genQRCode(url,  "e:\\qrcode1", "qrcode.png");
+        System.out.println("pathString="+pathString);
         //含Logo，不指定二维码图片名
         //QRCodeUtil.encode(text, "e:\\csdn.jpg", "e:\\", true);
         //含Logo，指定二维码图片名
