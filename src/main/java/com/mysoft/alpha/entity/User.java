@@ -74,6 +74,12 @@ public class User implements Serializable {
      */
     @Column(name = "email")
     private String email;
+    
+    /**
+     * 海报展示内容
+     */
+    @Column(name = "display")
+    private String display;
     /**
      * 企业主体ID
      */
@@ -243,6 +249,14 @@ public class User implements Serializable {
 		this.post = post;
 	}
 
+	public String getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(String display) {
+		this.display = display;
+	}
+
 	public BxPromotion getBxPromotion() {
         return bxPromotion;
     }
@@ -266,6 +280,7 @@ public class User implements Serializable {
         sb.append(", operator='").append(operator).append('\'');
         sb.append(", createTime=").append(createTime).append('\'');;
         sb.append(", post=").append(post).append('\'');
+        sb.append(", display=").append(display).append('\'');
         sb.append(", team=").append(team).append('\'');
         sb.append(", supUserid=").append(supUserid).append('\'');
         sb.append(", alphaSubject=").append(alphaSubject).append('\'');
