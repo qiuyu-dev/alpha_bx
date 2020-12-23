@@ -191,7 +191,7 @@ public class WechatController {
         Map<String ,Object> baseMap =  HttpUtils.doGet(accessTokenUrl);
 		if(log.isInfoEnabled()) {
 			log.info(String.format("%s",baseMap));
-		};
+		}
         String openid = (String)baseMap.get("openid");
 		if(StringUtils.isBlank(openid)) {
 			return ResultFactory.buildFailResult("参数openid为空");
@@ -307,14 +307,18 @@ public class WechatController {
             }        
 
 		long begin = System.currentTimeMillis();
-		log.info(" " + user.getName() +" 调用接口 "+request.getRequestURI());
+		if(log.isInfoEnabled()) {
+			log.info("" + user.getName() +" 调用接口 "+request.getRequestURI());
+		}
     	MyPage<BxAchievement> myPage = new MyPage<BxAchievement>();
         Pageable pageable = PageRequest.of(page-1,size,Sort.by(Sort.Direction.ASC,"id"));
     	Page<BxAchievement> list = bxAchievementService.findPageByPromotionId(promotionId,pageable);
         if (list != null && list.getContent().size() > 0) {
         	myPage = new MyPage<BxAchievement>(list);
         }
-        log.info("耗时:"+(System.currentTimeMillis() - begin) /1000+ "s 获取"+myPage.getNumberOfElements() +"条记录");
+        if(log.isInfoEnabled()) {
+        	log.info("耗时:"+(System.currentTimeMillis() - begin) /1000+ "s 获取"+myPage.getNumberOfElements() +"条记录");
+        }        
     	return ResultFactory.buildSuccessResult(myPage);
         }
     }
@@ -396,7 +400,6 @@ public class WechatController {
 
             for (BxPromotion bxPromotion : promotionList) {
 //            	if(bxPromotion.getId() > 510) {
-
                 QRCodeUtil.encode(bxPromotion.getUrl(), null,
                         destPath + "my/file/qrcode" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME, true);
 //            	}
@@ -427,8 +430,7 @@ public class WechatController {
             String destPath = alphaConfig.getUploadFolder();
 
             for (BxPromotion bxPromotion : promotionList) {
-//            	   if(bxPromotion.getId() > 510) {
-            		              	   
+//            	   if(bxPromotion.getId() > 510) {            		              	   
                 QRCodeUtil.genQRCode(bxPromotion.getUrl(), 
                         destPath + "qrcode" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME);
 //                  }
