@@ -14,7 +14,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mysoft.alpha.config.AlphaConfig;
 import com.mysoft.alpha.config.WeChatConfig;
 import com.mysoft.alpha.dto.DisplayDTO;
+import com.mysoft.alpha.entity.BxAchievement;
 import com.mysoft.alpha.entity.BxPromotion;
 import com.mysoft.alpha.entity.User;
 import com.mysoft.alpha.entity.WxUser;
+import com.mysoft.alpha.exception.CustomException;
 import com.mysoft.alpha.result.Result;
 import com.mysoft.alpha.result.ResultFactory;
 import com.mysoft.alpha.service.BxAchievementService;
@@ -33,7 +40,10 @@ import com.mysoft.alpha.service.BxTaskService;
 import com.mysoft.alpha.service.UserService;
 import com.mysoft.alpha.service.WxUserService;
 import com.mysoft.alpha.util.HttpUtils;
+import com.mysoft.alpha.util.MyPage;
 import com.mysoft.alpha.util.QRCodeUtil;
+
+import junit.framework.Test;
 
 @RestController
 @RequestMapping("/api/v1/wechat")
@@ -264,6 +274,51 @@ public class WechatController {
     	return ResultFactory.buildSuccessResult("success");
     }
     
+    @GetMapping("/achievement")
+    public Result achievement(@RequestParam(value = "openid", required = true) String openid,
+    		                    @RequestParam(value = "size", required = true) int size,
+    		                    @RequestParam(value = "page", required = true) int page,
+    		                    HttpServletRequest request) {
+		if(StringUtils.isBlank(openid)) {
+			return ResultFactory.buildFailResult("参数openid为空");
+		}
+		
+		if(size < 0 || page < 0) {
+			return  ResultFactory.buildFailResult("请检查参数");
+		}
+		
+        WxUser wxUser = wxUserService.findByOpenid(openid);
+
+        if (wxUser == null) {
+        	 return ResultFactory.buildFailResult("用户不存在");
+        } else {
+            User user = new User();
+            Integer promotionId = 0;
+            user = userService.findById(wxUser.getUserid());
+            if (user == null) {
+                return ResultFactory.buildFailResult("用户不存在");
+            }else {
+                BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
+                //确认我方用户是否已认证
+                if (bxPromotion != null && user.getEnabled().intValue() == 1) {
+                    user.setBxPromotion(bxPromotion);
+                    promotionId = bxPromotion.getId();
+                }
+            }        
+
+		long begin = System.currentTimeMillis();
+		log.info(" " + user.getName() +" 调用接口 "+request.getRequestURI());
+    	MyPage<BxAchievement> myPage = new MyPage<BxAchievement>();
+        Pageable pageable = PageRequest.of(page-1,size,Sort.by(Sort.Direction.ASC,"id"));
+    	Page<BxAchievement> list = bxAchievementService.findPageByPromotionId(promotionId,pageable);
+        if (list != null && list.getContent().size() > 0) {
+        	myPage = new MyPage<BxAchievement>(list);
+        }
+        log.info("耗时:"+(System.currentTimeMillis() - begin) /1000+ "s 获取"+myPage.getNumberOfElements() +"条记录");
+    	return ResultFactory.buildSuccessResult(myPage);
+        }
+    }
+    
     //查询展示
     @GetMapping("/display")
     public Result display(@RequestParam(value = "openid", required = true) String openid,
@@ -340,9 +395,11 @@ public class WechatController {
             String destPath = alphaConfig.getUploadFolder();
 
             for (BxPromotion bxPromotion : promotionList) {
-            	
+//            	if(bxPromotion.getId() > 510) {
+
                 QRCodeUtil.encode(bxPromotion.getUrl(), null,
-                        destPath + "qrcode" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME, true);
+                        destPath + "my/file/qrcode" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME, true);
+//            	}
             }
 
         }
@@ -370,9 +427,11 @@ public class WechatController {
             String destPath = alphaConfig.getUploadFolder();
 
             for (BxPromotion bxPromotion : promotionList) {
-            	
+//            	   if(bxPromotion.getId() > 510) {
+            		              	   
                 QRCodeUtil.genQRCode(bxPromotion.getUrl(), 
                         destPath + "qrcode" + bxPromotion.getId() ,QRCodeUtil.QRCODE_FILENAME);
+//                  }
             }
 
         }

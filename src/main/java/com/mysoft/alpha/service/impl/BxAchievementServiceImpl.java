@@ -1,10 +1,15 @@
 package com.mysoft.alpha.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mysoft.alpha.dao.BxAchievementDao;
 import com.mysoft.alpha.dao.BxUserPromotionDao;
+import com.mysoft.alpha.entity.BxAchievement;
 import com.mysoft.alpha.entity.BxUserPromotion;
 import com.mysoft.alpha.service.BxAchievementService;
 
@@ -39,4 +44,18 @@ public class BxAchievementServiceImpl implements BxAchievementService {
         }
         return amount;
     }
+
+
+	@Override
+	public List<BxAchievement> findAllByPromotionId(Integer promotionId) {
+		List<BxAchievement> list = bxAchievementDao.findAllByPromotionId(promotionId);
+		return list;
+	}
+
+
+	@Override
+	public Page<BxAchievement> findPageByPromotionId(Integer promotionId, Pageable pageable) {
+		Page<BxAchievement> page = bxAchievementDao.findPageByPromotionId(promotionId, pageable);
+		return page;
+	}
 }

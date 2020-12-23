@@ -1,5 +1,6 @@
 package com.mysoft.alpha.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -22,17 +23,18 @@ public class BxAchievement implements Serializable {
 	@Column(name = "id")
 	private Integer id;
 
-	/**
-	 * 用户ID
-	 */
 	@Column(name = "promotion_id")
 	private Integer promotionId;
+	
 	@Column(name = "url")
 	private String url;
+	
 	@Column(name = "amount")
 	private Integer amount;
+	
 //    @Column(name = "product_code")
 //    private String productCode;
+	
 	@Column(name = "goods_code")
 	private String goodsCode;
 
@@ -40,6 +42,7 @@ public class BxAchievement implements Serializable {
 	 * 创建时间
 	 */
 	@Column(name = "create_time")
+    @JsonFormat(pattern = "yyyy-MM-dd ", timezone = "GMT+8")
 	private Date createTime;
 	/**
 	 * 备注，用于存来源文件名
@@ -47,6 +50,36 @@ public class BxAchievement implements Serializable {
 	@Column(name = "remark")
 	private String remark;
 
+	/**
+	 * 曝光人数
+	 */
+	@Column(name = "exposure_num")
+	private Integer exposureNum;
+	
+	/**
+	 * 关注数量
+	 */
+	@Column(name = "follow_num")
+	private Integer followNum;
+	
+	/**
+	 * 保险费
+	 */
+	@Column(name = "premium")
+	private Integer premium;
+	
+	/**
+	 * 统计标识，1为直接投保，2为公众号
+	 */
+	@Column(name = "flag")
+	private Integer flag;
+	
+	/**
+	 * 成单客户
+	 */
+	@Column(name = "customers")
+	private String customers;
+	
 	public BxAchievement() {
 	}
 
@@ -114,10 +147,52 @@ public class BxAchievement implements Serializable {
 		this.remark = remark;
 	}
 
+	public Integer getExposureNum() {
+		return exposureNum;
+	}
+
+	public void setExposureNum(Integer exposureNum) {
+		this.exposureNum = exposureNum;
+	}
+
+	public Integer getFollowNum() {
+		return followNum;
+	}
+
+	public void setFollowNum(Integer followNum) {
+		this.followNum = followNum;
+	}
+
+	public Integer getPremium() {
+		return premium;
+	}
+
+	public void setPremium(Integer premium) {
+		this.premium = premium;
+	}
+
+	public Integer getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Integer flag) {
+		this.flag = flag;
+	}
+
+	public String getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(String customers) {
+		this.customers = customers;
+	}
+
 	@Override
 	public String toString() {
 		return "BxAchievement [id=" + id + ", promotionId=" + promotionId + ", url=" + url + ", amount=" + amount
-				+ ", goodsCode=" + goodsCode + ", createTime=" + createTime + ", remark=" + remark + "]";
+				+ ", goodsCode=" + goodsCode + ", createTime=" + createTime + ", remark=" + remark + ", exposureNum="
+				+ exposureNum + ", followNum=" + followNum + ", premium=" + premium + ", flag=" + flag + ", customers="
+				+ customers + "]";
 	}
 
 }

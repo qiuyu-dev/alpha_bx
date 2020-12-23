@@ -1,5 +1,11 @@
 package com.mysoft.alpha.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.mysoft.alpha.entity.BxAchievement;
 
 /**
  * (BxAchievement)表服务接口
@@ -9,5 +15,9 @@ package com.mysoft.alpha.service;
  */
 public interface BxAchievementService {
     Long findAmountByUserId(Integer userId);
+    
+    List<BxAchievement> findAllByPromotionId(Integer promotionId);
+    
+    Page<BxAchievement> findPageByPromotionId(Integer promotionId, Pageable pageable);
 
 }
