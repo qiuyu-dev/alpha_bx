@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +30,6 @@ import com.mysoft.alpha.entity.BxAchievement;
 import com.mysoft.alpha.entity.BxPromotion;
 import com.mysoft.alpha.entity.User;
 import com.mysoft.alpha.entity.WxUser;
-import com.mysoft.alpha.exception.CustomException;
 import com.mysoft.alpha.result.Result;
 import com.mysoft.alpha.result.ResultFactory;
 import com.mysoft.alpha.service.BxAchievementService;
@@ -39,11 +37,11 @@ import com.mysoft.alpha.service.BxPromotionService;
 import com.mysoft.alpha.service.BxTaskService;
 import com.mysoft.alpha.service.UserService;
 import com.mysoft.alpha.service.WxUserService;
+import com.mysoft.alpha.util.DateUtil;
 import com.mysoft.alpha.util.HttpUtils;
 import com.mysoft.alpha.util.MyPage;
 import com.mysoft.alpha.util.QRCodeUtil;
 
-import junit.framework.Test;
 
 @RestController
 @RequestMapping("/api/v1/wechat")
@@ -185,7 +183,7 @@ public class WechatController {
     }	
 	
     @GetMapping("/wxlogin")
-    public Result wxlogin(@RequestParam(value = "code",required = true)String code, HttpServletResponse response) throws Exception {
+    public Result wxlogin(@RequestParam(value = "code",required = true)String code,  HttpServletRequest request, HttpServletResponse response) throws Exception {
     	String accessTokenUrl = String.format(WeChatConfig.getAuthJscode2session(),weChatConfig.getAppId(),weChatConfig.getAppsecret(),code);
         //获取access_token
         Map<String ,Object> baseMap =  HttpUtils.doGet(accessTokenUrl);
@@ -233,7 +231,10 @@ public class WechatController {
 			return ResultFactory.buildFailResult("参数openid为空");
 		}
     	WxUser wxUser = wxUserService.findByOpenid(openid);
-    	if(wxUser !=null) {    		
+    	if(wxUser !=null) {
+        	if(wxUser.getUserid() == null) {
+        		return ResultFactory.buildFailResult("微信未绑定用户");
+        	}
     		User user = userService.findById(wxUser.getUserid());
     		if(user != null) {
         		Long amount = bxAchievementService.findAmountByUserId(user.getId());
@@ -274,6 +275,141 @@ public class WechatController {
     	return ResultFactory.buildSuccessResult("success");
     }
     
+    @GetMapping("/getSumData")
+    public Result getSumData(@RequestParam(value = "username", required = false) String username,    		      
+    		                    HttpServletRequest request, HttpServletResponse response) {
+    	if(StringUtils.isNotBlank(username)) {
+    		User user = userService.findByUsername(username);
+    		if(user != null) {
+     			if (log.isInfoEnabled()) {
+    				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+    			}
+    		}
+    	}    	
+    	Map<String, Object> map = bxAchievementService.findSumData();
+
+    	return ResultFactory.buildSuccessResult(map);
+    }
+    
+    @GetMapping("/getTotalData")
+    public Result getTotalData(@RequestParam(value = "username", required = false) String username,    		      
+    		                    HttpServletRequest request, HttpServletResponse response) {
+    	if(StringUtils.isNotBlank(username)) {
+    		User user = userService.findByUsername(username);
+    		if(user != null) {
+     			if (log.isInfoEnabled()) {
+    				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+    			}
+    		}
+    	}
+    	List<Map<String, Object>> list = bxAchievementService.findSumDataByDate();
+
+    	return ResultFactory.buildSuccessResult(list);
+    }
+    
+    @GetMapping("/getTop10DeptData")
+    public Result getTop10DeptData(@RequestParam(value = "username", required = false) String username,    		      
+    		                    HttpServletRequest request, HttpServletResponse response) {
+    	if(StringUtils.isNotBlank(username)) {
+    		User user = userService.findByUsername(username);
+    		if(user != null) {
+     			if (log.isInfoEnabled()) {
+    				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+    			}
+    		}
+    	}
+    	List<Map<String, Object>> list = bxAchievementService.findTop10DeptData();
+
+    	return ResultFactory.buildSuccessResult(list);
+    }
+
+
+    
+    @GetMapping("/getTop10PersonData")
+    public Result getTop10PersonData(@RequestParam(value = "username", required = false) String username,    		      
+    		                    HttpServletRequest request, HttpServletResponse response) {
+    	if(StringUtils.isNotBlank(username)) {
+    		User user = userService.findByUsername(username);
+    		if(user != null) {
+     			if (log.isInfoEnabled()) {
+    				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+    			}
+    		}
+    	}
+    	List<Map<String, Object>> list = bxAchievementService.findTop10PersonData();
+
+    	return ResultFactory.buildSuccessResult(list);
+    }
+
+    @GetMapping("/achievementData")
+    public Result achievementData(@RequestParam(value = "openid", required = true) String openid,    		      
+    		                    HttpServletRequest request, HttpServletResponse response) {
+		if(StringUtils.isBlank(openid)) {
+			return ResultFactory.buildFailResult("参数openid为空");
+		}
+		
+        WxUser wxUser = wxUserService.findByOpenid(openid);
+
+        if (wxUser == null) {
+        	 return ResultFactory.buildFailResult("用户不存在");
+        } else {
+        	if(wxUser.getUserid() == null) {
+        		return ResultFactory.buildFailResult("微信未绑定用户");
+        	}
+        	
+			Integer promotionId = 0;
+			User user = userService.findById(wxUser.getUserid());
+			if (user == null) {
+				return ResultFactory.buildFailResult("用户不存在");
+			} else {
+				BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
+				// 确认我方用户是否已认证
+				if (bxPromotion != null && user.getEnabled().intValue() == 1) {
+					user.setBxPromotion(bxPromotion);
+					promotionId = bxPromotion.getId();
+				}
+			}
+
+			long begin = System.currentTimeMillis();
+			if (log.isInfoEnabled()) {
+				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+			}
+			Map<String, Object> retMap = new HashMap<String, Object>();
+			List<BxAchievement> list = new ArrayList<BxAchievement>();
+			List<Object> xList = new ArrayList<Object>();
+			List<Object> xList2 = new ArrayList<Object>();
+			List<Object> yList = new ArrayList<Object>();
+			List<Object> yList2 = new ArrayList<Object>();
+			list = bxAchievementService.findAllByPromotionId(promotionId);
+			if (list != null && list.size() > 0) {
+				for(int i = 0; i < list.size() ;i++) {
+					BxAchievement bxAchievement = list.get(i);
+					if(bxAchievement.getFlag()== 2) {
+						xList2.add(DateUtil.dateToStr(bxAchievement.getCreateTime()));
+						yList2.add(bxAchievement.getAmount());
+					}else {
+						xList.add(DateUtil.dateToStr(bxAchievement.getCreateTime()));
+						yList.add(bxAchievement.getAmount());
+					}
+
+				}				
+			}
+//			System.out.println("xList="+xList + ",size="+xList.size());
+//			System.out.println("yList="+yList + ",size="+yList.size());
+//			System.out.println("xList2="+xList2+",size="+xList2.size());
+//			System.out.println("yList2="+yList2 +",size="+yList2.size());
+			retMap.put("xList",xList);
+			retMap.put("yList",yList);
+			retMap.put("xList2",xList2);
+			retMap.put("yList2",yList2);
+			if (log.isInfoEnabled()) {
+				log.info("耗时:" + (System.currentTimeMillis() - begin) / 1000 + "s 获取" + list.size()
+						+ "条记录");
+			}
+			return ResultFactory.buildSuccessResult(retMap);
+        }
+    }
+    
     @GetMapping("/achievement")
     public Result achievement(@RequestParam(value = "openid", required = true) String openid,
     		                    @RequestParam(value = "size", required = true) int size,
@@ -292,34 +428,38 @@ public class WechatController {
         if (wxUser == null) {
         	 return ResultFactory.buildFailResult("用户不存在");
         } else {
-            User user = new User();
-            Integer promotionId = 0;
-            user = userService.findById(wxUser.getUserid());
-            if (user == null) {
-                return ResultFactory.buildFailResult("用户不存在");
-            }else {
-                BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
-                //确认我方用户是否已认证
-                if (bxPromotion != null && user.getEnabled().intValue() == 1) {
-                    user.setBxPromotion(bxPromotion);
-                    promotionId = bxPromotion.getId();
-                }
-            }        
+        	if(wxUser.getUserid() == null) {
+        		return ResultFactory.buildFailResult("微信未绑定用户");
+        	}
+        	
+			Integer promotionId = 0;
+			User user = userService.findById(wxUser.getUserid());
+			if (user == null) {
+				return ResultFactory.buildFailResult("用户不存在");
+			} else {
+				BxPromotion bxPromotion = bxPromotionService.findByUserId(user.getId());
+				// 确认我方用户是否已认证
+				if (bxPromotion != null && user.getEnabled().intValue() == 1) {
+					user.setBxPromotion(bxPromotion);
+					promotionId = bxPromotion.getId();
+				}
+			}
 
-		long begin = System.currentTimeMillis();
-		if(log.isInfoEnabled()) {
-			log.info("" + user.getName() +" 调用接口 "+request.getRequestURI());
-		}
-    	MyPage<BxAchievement> myPage = new MyPage<BxAchievement>();
-        Pageable pageable = PageRequest.of(page-1,size,Sort.by(Sort.Direction.ASC,"id"));
-    	Page<BxAchievement> list = bxAchievementService.findPageByPromotionId(promotionId,pageable);
-        if (list != null && list.getContent().size() > 0) {
-        	myPage = new MyPage<BxAchievement>(list);
-        }
-        if(log.isInfoEnabled()) {
-        	log.info("耗时:"+(System.currentTimeMillis() - begin) /1000+ "s 获取"+myPage.getNumberOfElements() +"条记录");
-        }        
-    	return ResultFactory.buildSuccessResult(myPage);
+			long begin = System.currentTimeMillis();
+			if (log.isInfoEnabled()) {
+				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+			}
+			MyPage<BxAchievement> myPage = new MyPage<BxAchievement>();
+			Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "id"));
+			Page<BxAchievement> list = bxAchievementService.findPageByPromotionId(promotionId, pageable);
+			if (list != null && list.getContent().size() > 0) {
+				myPage = new MyPage<BxAchievement>(list);
+			}
+			if (log.isInfoEnabled()) {
+				log.info("耗时:" + (System.currentTimeMillis() - begin) / 1000 + "s 获取" + myPage.getNumberOfElements()
+						+ "条记录");
+			}
+			return ResultFactory.buildSuccessResult(myPage);
         }
     }
     

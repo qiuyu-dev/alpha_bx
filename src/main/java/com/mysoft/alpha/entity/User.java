@@ -50,7 +50,7 @@ public class User implements Serializable {
     /**
      * 密码，md5加密
      */
-    @JsonIgnore
+//    @JsonIgnore
     @Column(name = "password")
     private String password;
     /**

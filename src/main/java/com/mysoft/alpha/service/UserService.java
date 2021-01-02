@@ -25,6 +25,8 @@ public interface UserService {
     void updateUserStatus(User requestUser);
 
     User resetPassword(User requestUser);
+    
+    User updatePassword(User requestUser,String password);
 
     void editUser(User requestUser);
 

@@ -1,10 +1,5 @@
 package com.mysoft.alpha.controller;
 
-import com.mysoft.alpha.entity.User;
-import com.mysoft.alpha.model.RegisterForm;
-import com.mysoft.alpha.result.Result;
-import com.mysoft.alpha.result.ResultFactory;
-import com.mysoft.alpha.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -14,8 +9,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
+
+import com.mysoft.alpha.entity.User;
+import com.mysoft.alpha.model.RegisterForm;
+import com.mysoft.alpha.model.ResetPwdForm;
+import com.mysoft.alpha.result.Result;
+import com.mysoft.alpha.result.ResultFactory;
+import com.mysoft.alpha.service.UserService;
 
 @RestController
 @RequestMapping("/api")
@@ -29,7 +35,6 @@ public class LoginController {
     public Result login(@RequestBody User requestUser) {
         String username = requestUser.getUsername();
         username = HtmlUtils.htmlEscape(username);
-
         Subject subject = SecurityUtils.getSubject();
         //        subject.getSession().setTimeout(1);//没起作用
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, requestUser.getPassword());
@@ -90,5 +95,35 @@ public class LoginController {
     @GetMapping("/authentication")
     public String authentication() {
         return "身份认证成功";
+    }
+    
+    @PostMapping("/modifyPwd")
+    public Result modifyPwd(@RequestBody ResetPwdForm resetPwdForm) {
+    	String username = resetPwdForm.getUsername();
+    	String oldPwd = resetPwdForm.getOldPwd();
+    	String password = resetPwdForm.getPassword();
+    	String password2 = resetPwdForm.getPassword2();
+    	if(!password.equals(password2)) {
+    		return ResultFactory.buildFailResult("修改确认密码不一致");
+    	}
+        Subject subject = SecurityUtils.getSubject();
+
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, oldPwd);
+        usernamePasswordToken.setRememberMe(true);
+        try {
+            subject.login(usernamePasswordToken);
+            if(subject.isAuthenticated()) {
+                User user = userService.findByUsername(username);
+                userService.updatePassword(user, password);
+                log.info(""+ username + "修改密码成功");
+            }
+
+        } catch (IncorrectCredentialsException e) {
+            return ResultFactory.buildFailResult("密码错误");
+        } catch (UnknownAccountException e) {
+            return ResultFactory.buildFailResult("账号不存在");
+        }
+        return ResultFactory.buildSuccessResult("修改成功");
+       
     }
 }

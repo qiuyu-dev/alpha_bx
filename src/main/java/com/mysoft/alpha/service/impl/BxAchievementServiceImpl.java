@@ -1,6 +1,7 @@
 package com.mysoft.alpha.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,5 +58,33 @@ public class BxAchievementServiceImpl implements BxAchievementService {
 	public Page<BxAchievement> findPageByPromotionId(Integer promotionId, Pageable pageable) {
 		Page<BxAchievement> page = bxAchievementDao.findPageByPromotionId(promotionId, pageable);
 		return page;
+	}
+
+
+	@Override
+	public Map<String, Object> findSumData() {
+		Map<String, Object> map = bxAchievementDao.findSumData();
+		return map;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> findSumDataByDate() {
+		List<Map<String, Object>> list = bxAchievementDao.findSumDataByDate();
+		return list;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> findTop10DeptData() {
+		List<Map<String, Object>> list = bxAchievementDao.findTop10DeptData();
+		return list;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> findTop10PersonData() {
+		List<Map<String, Object>> list = bxAchievementDao.findTop10PersonData();
+		return list;
 	}
 }

@@ -46,6 +46,13 @@ public class UserController {
         userService.resetPassword(requestUser);
         return ResultFactory.buildSuccessResult("重置密码成功");
     }
+    
+    @GetMapping("/updatePwd")
+    @Transactional
+    public Result updatePassword(@RequestBody @Valid User requestUser,String password)  throws CustomException {
+        userService.updatePassword(requestUser,password);
+        return ResultFactory.buildSuccessResult("修改密码成功");
+    }
 
     @PutMapping("/edit")
     @Transactional

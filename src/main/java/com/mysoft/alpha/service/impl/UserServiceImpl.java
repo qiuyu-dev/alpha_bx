@@ -187,6 +187,18 @@ public class UserServiceImpl implements UserService {
         userInDB.setPassword(encodedPassword);
         return userDao.save(userInDB);
     }
+    
+    @Override
+    public User updatePassword(User user,String password) {
+        User userInDB = userDao.findByUsername(user.getUsername());
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        int times = 2;
+        userInDB.setSalt(salt);
+        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
+        userInDB.setPassword(encodedPassword);
+        return userDao.save(userInDB);
+    }
+    
     @Override
     public void editUser(User user) {
         User userInDB = userDao.findByUsername(user.getUsername());
