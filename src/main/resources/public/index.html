@@ -179,12 +179,10 @@
 </div>
 <div class="sub-sidebar-wrapper">
   <ul class="nav">
-    <li><a href="#widget_stat_charts_anchor">总体合计</a></li>
-    <li><a href="#widget_total_sale_data">总体销售</a></li>
-    <li><a href="#widget_stats_dept">销售成单量前十</a></li>
-    <li><a href="#widget_stats_dept_premium">销售保费前十</a></li>
-    <li><a href="#widget_stats_dept_num">销售曝光数前十</a></li>
-    <!-- <li><a href="#widget_stats">Statistics</a></li>    
+    <li><a href="#widget_stat_charts_anchor">总体销售</a></li>
+    <li><a href="#widget_stats_dept">部门前十</a></li>
+    <li><a href="#widget_stats_person">个人前十</a></li>
+     <!-- <li><a href="#widget_stats">Statistics</a></li>    
     <li><a href="#widget_tasks_list">Tasks List</a></li>
     <li><a href="#widget_real_time_chart">Real Time Chart</a></li>
     <li><a href="#widget_server_activity">Server Activity</a></li>
@@ -225,7 +223,7 @@
      <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
      <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
     </div>
-    <h3><i class="fa fa-bar-chart-o"></i> 总体合计</h3>
+    <h3><i class="fa fa-bar-chart-o"></i> 总体销售</h3>
   </div>
   <div class="widget-content">
     <div class="row">
@@ -369,6 +367,7 @@
   </div>
  </div>
 </div> -->
+
 <div class="row">
   <div class="widget widget-red">
   <span class="offset_anchor" id="widget_total_sale_data"></span>
@@ -391,7 +390,7 @@
       <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
       <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
     </div>
-    <h3><i class="fa fa-bar-chart-o"></i> 总体销售</h3>
+    <h3><i class="fa fa-bar-chart-o"></i> 总体销售日统计</h3>
   </div>
   <div class="widget-content">
     <!-- <ul class="nav nav-pills">
@@ -444,7 +443,7 @@
 </div>
 
 <div class="row">
-<div class="col-lg-6 col-md-6 col-sm-6">
+  <div class="col-lg-6 col-md-6 col-sm-6">
   <div class="widget widget-red">
     <span class="offset_anchor" id="widget_stats_dept"></span>
     <div class="widget-title">
@@ -469,13 +468,14 @@
       <h3><i class="fa fa-bar-chart-o"></i> 部门销售成单量前十</h3>
     </div>
     <div class="widget-content">
-      <div id="top10dept_barchart" style="height: 380px;"></div>
+      <div id="top10dept_barchart" style="height: 280px;"></div>
     </div>
   </div>
 </div>
+
 <div class="col-lg-6 col-md-6 col-sm-6">
   <div class="widget widget-red">
-    <span class="offset_anchor" id="widget_stats_person"></span>
+    <span class="offset_anchor" id="widget_stats_dept_premium"></span>
     <div class="widget-title">
       <div class="widget-controls">
         <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
@@ -495,10 +495,41 @@
         <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
         <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
       </div>
-      <h3><i class="fa fa-bar-chart-o"></i> 个人销售成单量前十</h3>
+      <h3><i class="fa fa-bar-chart-o"></i> 部门销售保费前十</h3>
     </div>
     <div class="widget-content">
-      <div id="top10person_barchart" style="height: 380px;"></div>
+      <div id="top10dept_barchart_premium" style="height: 280px;"></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="row">
+<div class="col-lg-6 col-md-6 col-sm-6">
+  <div class="widget widget-red">
+    <span class="offset_anchor" id="widget_stats_dept_num"></span>
+    <div class="widget-title">
+      <div class="widget-controls">
+        <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
+        <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
+        <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a>
+        <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
+          <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu">
+            <li class="dropdown-header">Set Widget Color</li>
+            <li><a data-widget-color="blue" class="set-widget-color" href="#">Blue</a></li>
+            <li><a data-widget-color="red" class="set-widget-color" href="#">Red</a></li>
+            <li><a data-widget-color="green" class="set-widget-color" href="#">Green</a></li>
+            <li><a data-widget-color="orange" class="set-widget-color" href="#">Orange</a></li>
+            <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
+          </ul>
+        </div>
+        <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+        <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
+        <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
+      </div>
+      <h3><i class="fa fa-bar-chart-o"></i> 部门销售曝光数前十</h3>
+    </div>
+    <div class="widget-content">
+      <div id="top10dept_barchart_num" style="height: 280px;"></div>
     </div>
   </div>
 </div>
@@ -507,7 +538,7 @@
 <div class="row">
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="widget widget-red">
-      <span class="offset_anchor" id="widget_stats_dept_premium"></span>
+      <span class="offset_anchor" id="widget_stats_person"></span>
       <div class="widget-title">
         <div class="widget-controls">
           <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
@@ -527,13 +558,14 @@
           <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
           <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
         </div>
-        <h3><i class="fa fa-bar-chart-o"></i> 部门销售保费前十</h3>
+        <h3><i class="fa fa-bar-chart-o"></i> 个人销售成单量前十</h3>
       </div>
       <div class="widget-content">
-        <div id="top10dept_barchart_premium" style="height: 380px;"></div>
+        <div id="top10person_barchart" style="height: 280px;"></div>
       </div>
     </div>
-  </div>
+  </div>  
+
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="widget widget-red">
       <span class="offset_anchor" id="widget_stats_person_premium"></span>
@@ -559,42 +591,12 @@
         <h3><i class="fa fa-bar-chart-o"></i> 个人销售保费前十</h3>
       </div>
       <div class="widget-content">
-        <div id="top10person_barchart_premium" style="height: 380px;"></div>
+        <div id="top10person_barchart_premium" style="height: 280px;"></div>
       </div>
     </div>
   </div>
-</div>
-  
-<div class="row">
-  <div class="col-lg-6 col-md-6 col-sm-6">
-    <div class="widget widget-red">
-      <span class="offset_anchor" id="widget_stats_dept_num"></span>
-      <div class="widget-title">
-        <div class="widget-controls">
-          <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
-          <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
-          <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a>
-          <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
-            <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu">
-              <li class="dropdown-header">Set Widget Color</li>
-              <li><a data-widget-color="blue" class="set-widget-color" href="#">Blue</a></li>
-              <li><a data-widget-color="red" class="set-widget-color" href="#">Red</a></li>
-              <li><a data-widget-color="green" class="set-widget-color" href="#">Green</a></li>
-              <li><a data-widget-color="orange" class="set-widget-color" href="#">Orange</a></li>
-              <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
-            </ul>
-          </div>
-          <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
-          <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
-          <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
-        </div>
-        <h3><i class="fa fa-bar-chart-o"></i> 部门销售曝光数前十</h3>
-      </div>
-      <div class="widget-content">
-        <div id="top10dept_barchart_num" style="height: 380px;"></div>
-      </div>
-    </div>
   </div>
+  <div class="row">
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="widget widget-red">
       <span class="offset_anchor" id="widget_stats_person_num"></span>
@@ -620,11 +622,13 @@
         <h3><i class="fa fa-bar-chart-o"></i> 个人销售曝光数前十</h3>
       </div>
       <div class="widget-content">
-        <div id="top10person_barchart_num" style="height: 380px;"></div>
+        <div id="top10person_barchart_num" style="height: 280px;"></div>
       </div>
     </div>
   </div>
 </div>
+  
+
 
 <!-- <div class="row">
   <div class="col-md-6">
