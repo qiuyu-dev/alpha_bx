@@ -87,4 +87,35 @@ public class BxAchievementServiceImpl implements BxAchievementService {
 		List<Map<String, Object>> list = bxAchievementDao.findTop10PersonData();
 		return list;
 	}
+
+
+	@Override
+	public List<Map<String, Object>> findDeptDataByDay(String beginDate,  String endDate) {
+		List<Map<String, Object>> list = bxAchievementDao.findDeptDataByDay(beginDate, endDate);
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> findDeptData(String beginDate, String endDate, String teamOrder) {
+		List<Map<String, Object>> list = bxAchievementDao.findDeptData(beginDate, endDate, teamOrder);
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> findPersonData(String beginDate, String endDate, String userId) {
+		List<Map<String, Object>> list = bxAchievementDao.findPersonData(beginDate, endDate, userId);
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> findAllDept() {
+		List<Map<String, Object>> list = bxAchievementDao.findAllDept();
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> findAllPerson() {
+		List<Map<String, Object>> list = bxAchievementDao.findAllPerson();
+		return list;
+	}
 }

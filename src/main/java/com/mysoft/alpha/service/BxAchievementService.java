@@ -17,11 +17,21 @@ import com.mysoft.alpha.entity.BxAchievement;
 public interface BxAchievementService {
 	Map<String, Object> findSumData();
 	
+	List<Map<String, Object>>findAllDept();
+	
+	List<Map<String, Object>>findAllPerson();
+	
 	List<Map<String, Object>> findSumDataByDate();
 	
 	List<Map<String, Object>> findTop10DeptData();
 	
 	List<Map<String, Object>> findTop10PersonData();
+	
+	List<Map<String, Object>> findDeptDataByDay(String beginDate,  String endDate);
+	
+	List<Map<String, Object>> findDeptData(String beginDate,  String endDate, String teamOrder);
+	
+	List<Map<String, Object>> findPersonData(String beginDate,  String endDate, String userId);
 	
     Long findAmountByUserId(Integer userId);
     

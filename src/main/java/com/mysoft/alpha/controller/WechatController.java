@@ -322,8 +322,6 @@ public class WechatController {
 
     	return ResultFactory.buildSuccessResult(list);
     }
-
-
     
     @GetMapping("/getTop10PersonData")
     public Result getTop10PersonData(@RequestParam(value = "username", required = false) String username,    		      
@@ -337,6 +335,106 @@ public class WechatController {
     		}
     	}
     	List<Map<String, Object>> list = bxAchievementService.findTop10PersonData();
+
+    	return ResultFactory.buildSuccessResult(list);
+    }
+    
+    @GetMapping("/getDeptDataByDay")
+    public Result getDeptDataByDay(@RequestParam(value = "username", required = false) String username, 
+    		@RequestParam(value = "beginDate", required = false) String beginDate,@RequestParam(value = "endDate", required = false) String endDate,
+    		                    HttpServletRequest request, HttpServletResponse response) {
+    	if(StringUtils.isNotBlank(username)) {
+    		User user = userService.findByUsername(username);
+    		if(user != null) {
+     			if (log.isInfoEnabled()) {
+    				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+    			}
+    		}
+    	}
+    	if(StringUtils.isBlank(beginDate)) {
+    		beginDate = "2020-12-08";
+    	}
+    	
+    	if(StringUtils.isBlank(endDate)) {
+    		endDate = DateUtil.getCurrentDate();    		
+    	}
+    	System.out.println("beginDate="+beginDate);
+    	System.out.println("endDate="+endDate);
+    	List<Map<String, Object>> list = bxAchievementService.findDeptDataByDay(beginDate, endDate);
+
+    	return ResultFactory.buildSuccessResult(list);
+    }
+    
+    @GetMapping("/getDept")
+    public Result getDept(HttpServletRequest request, HttpServletResponse response) {
+    	List<Map<String, Object>> list = bxAchievementService.findAllDept();
+
+    	return ResultFactory.buildSuccessResult(list);
+    }
+    
+    @GetMapping("/getDeptData")
+    public Result getDeptData(@RequestParam(value = "username", required = false) String username, 
+    		                                  @RequestParam(value = "beginDate", required = false) String beginDate,
+    		                                  @RequestParam(value = "endDate", required = false) String endDate,
+    		                                  @RequestParam(value = "teamOrder", required = false) String teamOrder,
+    		                    HttpServletRequest request, HttpServletResponse response) {
+    	if(StringUtils.isNotBlank(username)) {
+    		User user = userService.findByUsername(username);
+    		if(user != null) {
+     			if (log.isInfoEnabled()) {
+    				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+    			}
+    		}
+    	}
+    	if(StringUtils.isBlank(beginDate)) {
+    		beginDate = "2020-12-08";
+    	}
+    	
+    	if(StringUtils.isBlank(endDate)) {
+    		endDate = DateUtil.getCurrentDate();    		
+    	}
+    	
+//    	System.out.println("beginDate="+beginDate);
+//    	System.out.println("endDate="+endDate);
+//    	System.out.println("teamOrder="+teamOrder);
+    	List<Map<String, Object>> list = bxAchievementService.findDeptData(beginDate, endDate, teamOrder);
+
+    	return ResultFactory.buildSuccessResult(list);
+    }
+    
+    @GetMapping("/getPerson")
+    public Result getPerson(HttpServletRequest request, HttpServletResponse response) {
+    	List<Map<String, Object>> list = bxAchievementService.findAllPerson();
+
+    	return ResultFactory.buildSuccessResult(list);
+    }
+    
+    @GetMapping("/getPersonData")
+    public Result getPersonData(@RequestParam(value = "username", required = false) String username, 
+    		                                  @RequestParam(value = "beginDate", required = false) String beginDate,
+    		                                  @RequestParam(value = "endDate", required = false) String endDate,
+    		                                  @RequestParam(value = "userId", required = false) String userId,
+    		                    HttpServletRequest request, HttpServletResponse response) {
+    	if(StringUtils.isNotBlank(username)) {
+    		User user = userService.findByUsername(username);
+    		if(user != null) {
+     			if (log.isInfoEnabled()) {
+    				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+    			}
+    		}
+    	}
+    	if(StringUtils.isBlank(beginDate)) {
+    		beginDate = "2020-12-08";
+    	}
+    	
+    	if(StringUtils.isBlank(endDate)) {
+    		endDate = DateUtil.getCurrentDate();    		
+    	}
+
+//    	System.out.println("beginDate="+beginDate);
+//    	System.out.println("endDate="+endDate);
+//    	System.out.println("userId="+userId);
+    	List<Map<String, Object>> list = bxAchievementService.findPersonData(beginDate, endDate, userId);
 
     	return ResultFactory.buildSuccessResult(list);
     }

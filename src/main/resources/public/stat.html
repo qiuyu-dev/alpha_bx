@@ -127,13 +127,12 @@
       <a href="stat.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="销售统计">
         <i class="fa fa-bar-chart-o"></i>
       </a>
-    </li>    
+    </li>
     <li>
       <a href="setup.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="设置">
         <i class="fa fa-cog"></i>
       </a>
-    </li>    
-    
+    </li>         
     <!-- <li>
       <a href="forms.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="Forms">
         <i class="fa fa-file-text-o"></i>
@@ -180,9 +179,9 @@
 </div>
 <div class="sub-sidebar-wrapper">
   <ul class="nav">
-    <li><a href="#widget_stat_charts_anchor">总体销售情况</a></li>
-    <li><a href="#widget_stats_dept">部门销售情况</a></li>
-    <li><a href="#widget_stats_person">个人销售情况</a></li>
+    <li><a href="#widget_stat_charts_anchor">总体销售统计</a></li>
+    <li><a href="#widget_stats_dept_day">部门销售统计</a></li>
+    <li><a href="#widget_stats_person">个人销售统计</a></li>
      <!-- <li><a href="#widget_stats">Statistics</a></li>    
     <li><a href="#widget_tasks_list">Tasks List</a></li>
     <li><a href="#widget_real_time_chart">Real Time Chart</a></li>
@@ -444,7 +443,87 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-6 col-md-6 col-sm-6">
+  <div class="widget widget-blue">
+  <span class="offset_anchor" id="widget_stats_dept_day"></span>
+  <div class="widget-title">
+    <div class="widget-controls">
+      <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
+      <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
+      <!-- <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a> -->
+      <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
+        <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu1">
+          <li class="dropdown-header">Set Widget Color</li>
+          <li><a data-widget-color="blue" class="set-widget-color" href="#">Blue</a></li>
+          <li><a data-widget-color="red" class="set-widget-color" href="#">Red</a></li>
+          <li><a data-widget-color="green" class="set-widget-color" href="#">Green</a></li>
+          <li><a data-widget-color="orange" class="set-widget-color" href="#">Orange</a></li>
+          <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
+        </ul>
+      </div>
+      <!-- <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a> -->
+      <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
+      <!-- <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a> -->
+    </div>
+    <h3><i class="fa fa-bar-chart-o"></i> 部门销售排名</h3>
+  </div>
+  <div class="widget-content">
+    <!-- <ul class="nav nav-pills">
+      <li class="active"><a href="#">Hour</a></li>
+      <li><a href="#">Day</a></li>
+      <li><a href="#">Month</a></li>
+      <li class="hidden-xs"><a href="#">Year</a></li>
+    </ul> -->
+    <div class="widget-content-tp">
+      <div class="padded-no-sides">
+        <div id="dept_data_order" style="height: 250px;"></div>
+      </div>
+       <div class="shadowed-top top-margin">
+        <div class="row">
+          <!-- <div class="col-lg-4 col-md-5 col-sm-6 bordered">
+            <div class="value-block value-bigger changed-up some-left-padding changed-up-border">
+              <div class="value-self">
+                $5,450
+                <span class="changed-icon"><i class="fa fa-caret-up"></i></span>
+                <span class="changed-value">+5.00%</span>
+              </div>
+              <div class="value-sub">Average of $450.35 Per Day</div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-3 visible-md visible-lg bordered">
+            <div class="value-block text-center">
+              <div class="value-self">520</div>
+              <div class="value-sub">Total Sales</div>
+            </div>
+          </div>
+          <div class="col-lg-2 bordered visible-lg">
+            <div class="value-block text-center">
+              <div class="value-self">1,120</div>
+              <div class="value-sub">Total Visitors</div>
+            </div>
+          </div> -->
+          <div class="col-lg-4 col-md-4 col-sm-6">
+            <form class="form-inline form-period-selector">
+              <label class="control-label">时间段:</label><br>
+              <input type="hidden" id="beginDate" name="beginDate" placeholder="12/08/2020" class="form-control input-sm input-datepicker">
+              <input type="hidden" id="endDate" name="endDate" placeholder="12/18/2020" class="form-control input-sm input-datepicker">
+              <div class="input-group">
+		        <button type="button" class="btn btn-default pull-left" id="daterange-btn">
+		            <i class="fa fa-calendar"></i>
+		            <span>时间</span>
+		            <i class="fa fa-caret-down"></i>
+		        </button>
+		        <button type="button" class="btn btn-default btn" id="btnDeptDay">查询</button>
+		      </div>              
+            </form>
+          </div>
+        </div>
+       </div>
+    </div>
+  </div>
+ </div>
+</div>
+
+<div class="row">
   <div class="widget widget-blue">
     <span class="offset_anchor" id="widget_stats_dept"></span>
     <div class="widget-title">
@@ -466,10 +545,79 @@
         <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
         <!-- <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a> -->
       </div>
-      <h3><i class="fa fa-bar-chart-o"></i> 部门销售成单量前十</h3>
+      <h3><i class="fa fa-bar-chart-o"></i> 部门销售统计</h3>
     </div>
     <div class="widget-content">
-      <div id="top10dept_barchart" style="height: 280px;"></div>
+      <div class="padded-no-sides">
+      <div id="dept_data" style="height: 280px;"></div>
+      </div>
+       <div class="shadowed-top top-margin">
+        <div class="row">
+          <!-- <div class="col-lg-4 col-md-5 col-sm-6 bordered">
+            <div class="value-block value-bigger changed-up some-left-padding changed-up-border">
+              <div class="value-self">
+                $5,450
+                <span class="changed-icon"><i class="fa fa-caret-up"></i></span>
+                <span class="changed-value">+5.00%</span>
+              </div>
+              <div class="value-sub">Average of $450.35 Per Day</div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-3 visible-md visible-lg bordered">
+            <div class="value-block text-center">
+              <div class="value-self">520</div>
+              <div class="value-sub">Total Sales</div>
+            </div>
+          </div>
+          <div class="col-lg-2 bordered visible-lg">
+            <div class="value-block text-center">
+              <div class="value-self">1,120</div>
+              <div class="value-sub">Total Visitors</div>
+            </div>
+          </div> -->
+          <div class="col-lg-4 col-md-4 col-sm-6">
+            <form class="form-inline form-period-selector">
+              <label class="control-label">选择部门:</label><br>
+              <div class="input-group">
+		        <select class="form-control" style="width: 155px" id="selectDept" onchange="selDept(this)">
+		        <option value="" selected >请选择部门</option>
+                </select>
+		      </div>              
+            </form>            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+
+<!-- <div class="row">
+  <div class="col-lg-6 col-md-6 col-sm-6">
+  <div class="widget widget-blue">
+    <span class="offset_anchor" id="widget_stats_dept_amount"></span>
+    <div class="widget-title">
+      <div class="widget-controls">
+        <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
+        <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
+        <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a>
+        <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
+          <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu">
+            <li class="dropdown-header">Set Widget Color</li>
+            <li><a data-widget-color="blue" class="set-widget-color" href="#">Blue</a></li>
+            <li><a data-widget-color="red" class="set-widget-color" href="#">Red</a></li>
+            <li><a data-widget-color="green" class="set-widget-color" href="#">Green</a></li>
+            <li><a data-widget-color="orange" class="set-widget-color" href="#">Orange</a></li>
+            <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
+          </ul>
+        </div>
+        <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+        <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
+        <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
+      </div>
+      <h3><i class="fa fa-bar-chart-o"></i> 部门销售成单量统计</h3>
+    </div>
+    <div class="widget-content">
+      <div id="dept_data_amount" style="height: 280px;"></div>
     </div>
   </div>
 </div>
@@ -481,7 +629,7 @@
       <div class="widget-controls">
         <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
         <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
-        <!-- <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a> -->
+        <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a>
         <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
           <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu">
             <li class="dropdown-header">Set Widget Color</li>
@@ -492,19 +640,20 @@
             <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
           </ul>
         </div>
-        <!-- <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a> -->
+        <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
         <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
-        <!-- <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a> -->
+        <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
       </div>
-      <h3><i class="fa fa-bar-chart-o"></i> 部门销售保费前十</h3>
+      <h3><i class="fa fa-bar-chart-o"></i> 部门销售保费统计</h3>
     </div>
     <div class="widget-content">
-      <div id="top10dept_barchart_premium" style="height: 280px;"></div>
+      <div id="dept_data_premium" style="height: 280px;"></div>
     </div>
   </div>
 </div>
-</div>
-<div class="row">
+</div> -->
+
+<!-- <div class="row">
 <div class="col-lg-6 col-md-6 col-sm-6">
   <div class="widget widget-blue">
     <span class="offset_anchor" id="widget_stats_dept_num"></span>
@@ -512,7 +661,7 @@
       <div class="widget-controls">
         <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
         <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
-        <!-- <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a> -->
+        <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a>
         <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
           <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu">
             <li class="dropdown-header">Set Widget Color</li>
@@ -523,21 +672,20 @@
             <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
           </ul>
         </div>
-        <!-- <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a> -->
+        <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
         <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
-        <!-- <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a> -->
+        <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
       </div>
-      <h3><i class="fa fa-bar-chart-o"></i> 部门销售曝光数前十</h3>
+      <h3><i class="fa fa-bar-chart-o"></i> 部门销售曝光数统计</h3>
     </div>
     <div class="widget-content">
-      <div id="top10dept_barchart_num" style="height: 280px;"></div>
+      <div id="dept_data_num" style="height: 280px;"></div>
     </div>
   </div>
 </div>
-</div>
+</div> -->
 
-<div class="row">
-  <div class="col-lg-6 col-md-6 col-sm-6">
+ <div class="row">
     <div class="widget widget-blue">
       <span class="offset_anchor" id="widget_stats_person"></span>
       <div class="widget-title">
@@ -559,10 +707,57 @@
           <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
           <!-- <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a> -->
         </div>
-        <h3><i class="fa fa-bar-chart-o"></i> 个人销售成单量前十</h3>
+        <h3><i class="fa fa-bar-chart-o"></i> 个人销售统计</h3>
       </div>
       <div class="widget-content">
-        <div id="top10person_barchart" style="height: 280px;"></div>
+         <div class="padded-no-sides">
+           <div id="person_data" style="height: 280px;"></div>
+         </div>
+         <div class="shadowed-top top-margin">
+           <div class="row">
+           <div class="col-lg-4 col-md-4 col-sm-6">
+            <form class="form-inline form-period-selector">
+              <label class="control-label">选择人员:</label><br>
+              <div class="input-group">
+		        <select class="form-control" style="width: 155px" id="selectPerson" onchange="selPerson(this)">
+		        <option value="" selected >请选择人员</option>
+                </select>
+		      </div>              
+            </form>            
+           </div>
+          </div>
+        </div>          
+      </div>
+  </div>
+ </div>
+
+<!-- <div class="row">
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="widget widget-blue">
+      <span class="offset_anchor" id="widget_stats_person_amount"></span>
+      <div class="widget-title">
+        <div class="widget-controls">
+          <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
+          <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
+          <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a>
+          <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
+            <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu">
+              <li class="dropdown-header">Set Widget Color</li>
+              <li><a data-widget-color="blue" class="set-widget-color" href="#">Blue</a></li>
+              <li><a data-widget-color="red" class="set-widget-color" href="#">Red</a></li>
+              <li><a data-widget-color="green" class="set-widget-color" href="#">Green</a></li>
+              <li><a data-widget-color="orange" class="set-widget-color" href="#">Orange</a></li>
+              <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
+            </ul>
+          </div>
+          <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
+          <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
+          <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
+        </div>
+        <h3><i class="fa fa-bar-chart-o"></i> 个人销售成单量统计</h3>
+      </div>
+      <div class="widget-content">
+        <div id="person_data_amount" style="height: 280px;"></div>
       </div>
     </div>
   </div>  
@@ -574,7 +769,7 @@
         <div class="widget-controls">
           <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
           <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
-          <!-- <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a> -->
+          <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a>
           <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
             <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu">
               <li class="dropdown-header">Set Widget Color</li>
@@ -585,19 +780,20 @@
               <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
             </ul>
           </div>
-          <!-- <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a> -->
+          <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
           <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
-          <!-- <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a> -->
+          <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
         </div>
-        <h3><i class="fa fa-bar-chart-o"></i> 个人销售保费前十</h3>
+        <h3><i class="fa fa-bar-chart-o"></i> 个人销售保费统计</h3>
       </div>
       <div class="widget-content">
-        <div id="top10person_barchart_premium" style="height: 280px;"></div>
+        <div id="person_data_premium" style="height: 280px;"></div>
       </div>
     </div>
   </div>
-  </div>
-  <div class="row">
+  </div> -->
+  
+<!--   <div class="row">
   <div class="col-lg-6 col-md-6 col-sm-6">
     <div class="widget widget-blue">
       <span class="offset_anchor" id="widget_stats_person_num"></span>
@@ -605,7 +801,7 @@
         <div class="widget-controls">
           <a href="#" class="widget-control widget-control-full-screen" data-toggle="tooltip" data-placement="top" title="" data-original-title="Full Screen"><i class="fa fa-expand"></i></a>
           <a href="#" class="widget-control widget-control-full-screen widget-control-show-when-full" data-toggle="tooltip" data-placement="left" title="" data-original-title="Exit Full Screen"><i class="fa fa-expand"></i></a>
-          <!-- <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a> -->
+          <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i class="fa fa-cog"></i></a>
           <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
             <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu">
               <li class="dropdown-header">Set Widget Color</li>
@@ -616,20 +812,18 @@
               <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
             </ul>
           </div>
-          <!-- <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a> -->
+          <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></a>
           <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top" title="" data-original-title="Minimize"><i class="fa fa-minus-circle"></i></a>
-          <!-- <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a> -->
+          <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
         </div>
-        <h3><i class="fa fa-bar-chart-o"></i> 个人销售曝光数前十</h3>
+        <h3><i class="fa fa-bar-chart-o"></i> 个人销售曝光数统计</h3>
       </div>
       <div class="widget-content">
-        <div id="top10person_barchart_num" style="height: 280px;"></div>
+        <div id="person_data_num" style="height: 280px;"></div>
       </div>
     </div>
   </div>
-</div>
-  
-
+</div> -->
 
 <!-- <div class="row">
   <div class="col-md-6">
@@ -1407,40 +1601,6 @@
   </div>
 </div> -->
 
-<div aria-hidden='true' class='modal fade' id='loginModal' role='dialog' tabindex='-1'>
-  <div class='modal-dialog'>
-    <div class='modal-content'>
-      <div class='modal-header'>
-        <button aria-hidden='true' class='close' data-dismiss='modal' type='button'>×</button>
-        <h4 class='modal-title'>Login example</h4>
-      </div>
-      <div class='modal-body'>
-        <form action='' role='form' id="form1" method="post">
-          <div class='row'>
-            <div class='col-md-6'>
-              <label class='control-label'>Username</label>
-              <input class='form-control' placeholder='your username' type='text' id="username" name="username" title="请输入用户名" required>
-            </div>
-            <div class='col-md-6'>
-              <label class='control-label'>Password</label>
-              <input class='form-control' placeholder='your password' type='password' id="password" name="password" title="请输入密码" required minlength='3' maxlength='6'>
-            </div>
-          </div>
-          <div id='msg' class="error">
-          </div>
-          <div class='modal-footer'>
-            <button class='btn btn-default' data-dismiss='modal' type='button' id='closeButton'>Close</button>
-            <button class='btn btn-primary' type='submit' id='loginButton'>Log In</button>
-          </div>
-        </form>
-      </div>
-      <!-- <div class='modal-footer'>
-        <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
-        <button class='btn btn-primary' type='submit' id='loginButton'>Log In</button>
-      </div> -->
-    </div>
-  </div>
-</div>
 </div>
 <div class="page-footer">
   © 2020 One Tree Hill crop.
@@ -1524,7 +1684,7 @@
 	        //dataType: 'text',
 	        success: function (res) {
 	          if(res.code==200){
-              $("#period").text(res.result.period);
+                  $("#period").text(res.result.period);
 	        	  $("#amount").text(res.result.amount);
 	        	  $("#exposure_num").text(res.result.num);
 	        	  $("#premium").text(res.result.premium);
@@ -1562,10 +1722,43 @@
 	      })
   }
   
-  function getTop10DeptData(){
+  function getDeptDataByDay(){
+	  var username = $.cookie('username');
+	  var beginDate = $("#beginDate").val();
+	  var endDate = $("#endDate").val();
+	  $.ajax({
+	        url: '/api/v1/wechat/getDeptDataByDay',
+	        type: 'get',
+	        //contentType: 'application/json',
+	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+	        data: {username:username,beginDate:beginDate,endDate:endDate},
+	        //dataType: 'text',
+	        success: function (res) {
+	          if(res.code==200){
+	        	  $("#dept_data_order").empty();
+	        	  $("#dept_data_order svg").remove();
+	        	  Morris.Bar({
+	        		    element: 'dept_data_order',
+	        		    data:  res.result,
+	        		    xkey: 'team_name',
+	        		    ykeys: ['amount','premium','num'],
+	        		    labels: ['成单量', '保费','曝光数'],
+	        		    barRatio: 0.2,
+	        		    xLabelAngle: 35,
+	        		    hideHover: 'auto',
+	        		    barColors: ["#A8D2ED", "#607284", "#F39C12", "#2C3E50", "#1abc9c", "#34495e", "#9b59b6", "#e74c3c"]
+	        		  });
+	          }else{
+	        	  alert(res.message);
+	          }
+	        }
+	      })
+  }
+  
+  function getDeptData(){
 	  var username = $.cookie('username');
 	  $.ajax({
-	        url: '/api/v1/wechat/getTop10DeptData',
+	        url: '/api/v1/wechat/getDeptData',
 	        type: 'get',
 	        //contentType: 'application/json',
 	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
@@ -1574,40 +1767,48 @@
 	        success: function (res) {
 	          if(res.code==200){
 
-	        	  Morris.Bar({
-	        		    element: 'top10dept_barchart',
+	        	  Morris.Line({
+	        		    element: 'dept_data',
 	        		    data: res.result,
-	        		    xkey: 'dept',
-	        		    ykeys: ['amount'],
-	        		    labels: ['成单数'],
-	        		    barRatio: 0.2,
+	        		    xkey: 'date_time',
+	        		    ykeys: ['amount','premium','num'],
+	        		    labels: ['成单数','保费','曝光数'],	        		   
 	        		    xLabelAngle: 35,
 	        		    hideHover: 'auto',
-	        		    barColors: ["#A8D2ED"]
+	        		    LineColors: ["#A8D2ED", "#607284", "#F39C12", "#2C3E50", "#1abc9c", "#34495e", "#9b59b6", "#e74c3c"]
                 });
-
-              Morris.Bar({
-	        		    element: 'top10dept_barchart_premium',
+	        	  
+	              Morris.Line({
+	        		    element: 'dept_data_amount',
 	        		    data: res.result,
-	        		    xkey: 'dept',
-	        		    ykeys: ['premium'],
-	        		    labels: ['保费'],
-	        		    barRatio: 0.2,
+	        		    xkey: 'date_time',
+	        		    ykeys: ['amount'],
+	        		    labels: ['成单数'],	        		    
 	        		    xLabelAngle: 35,
 	        		    hideHover: 'auto',
-	        		    barColors: ["#607284"]
+	        		    LineColors: ["#607284"]
+              });        	  
+
+              Morris.Line({
+	        		    element: 'dept_data_premium',
+	        		    data: res.result,
+	        		    xkey: 'date_time',
+	        		    ykeys: ['premium'],
+	        		    labels: ['保费'],	        		    
+	        		    xLabelAngle: 35,
+	        		    hideHover: 'auto',
+	        		    LineColors: ["#F39C12"]
                 });
                 
-              Morris.Bar({
-	        		    element: 'top10dept_barchart_num',
+              Morris.Line({
+	        		    element: 'dept_data_num',
 	        		    data: res.result,
-	        		    xkey: 'dept',
+	        		    xkey: 'date_time',
 	        		    ykeys: ['num'],
-	        		    labels: ['曝光数'],
-	        		    barRatio: 0.2,
+	        		    labels: ['曝光数'],	        		    
 	        		    xLabelAngle: 35,
 	        		    hideHover: 'auto',
-	        		    barColors: ["#F39C12"]
+	        		    LineColors: ["#2C3E50"]
                 });                
                 
 	          }else{
@@ -1617,10 +1818,10 @@
 	      })
   }
   
-  function getTop10PersonData(){
+  function getPersonData(){
 	  var username = $.cookie('username');
 	  $.ajax({
-	        url: '/api/v1/wechat/getTop10PersonData',
+	        url: '/api/v1/wechat/getPersonData',
 	        type: 'get',
 	        //contentType: 'application/json',
 	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
@@ -1628,41 +1829,49 @@
 	        //dataType: 'text',
 	        success: function (res) {
 	          if(res.code==200){
-
-	        	  Morris.Bar({
-	        		    element: 'top10person_barchart',
+	        	  
+	        	  Morris.Line({
+	        		    element: 'person_data',
 	        		    data: res.result,
-	        		    xkey: 'name',
+	        		    xkey: 'date_time',
+	        		    ykeys: ['amount','premium','num'],
+	        		    labels: ['成单数','保费','曝光数'],
+	        		    xLabelAngle: 35,
+	        		    hideHover: 'auto',
+	        		    LineColors: ["#A8D2ED", "#607284", "#F39C12", "#2C3E50", "#1abc9c", "#34495e", "#9b59b6", "#e74c3c"]
+                 });
+
+	        	  Morris.Line({
+	        		    element: 'person_data_amount',
+	        		    data: res.result,
+	        		    xkey: 'date_time',
 	        		    ykeys: ['amount'],
 	        		    labels: ['成单数'],
-	        		    barRatio: 0.2,
 	        		    xLabelAngle: 35,
 	        		    hideHover: 'auto',
-	        		    barColors: ["#A8D2ED"]
+	        		    LineColors: ["#A8D2ED"]
                 });
 
-              Morris.Bar({
-	        		    element: 'top10person_barchart_premium',
+              Morris.Line({
+	        		    element: 'person_data_premium',
 	        		    data: res.result,
-	        		    xkey: 'name',
+	        		    xkey: 'date_time',
 	        		    ykeys: ['premium'],
 	        		    labels: ['保费'],
-	        		    barRatio: 0.2,
 	        		    xLabelAngle: 35,
 	        		    hideHover: 'auto',
-	        		    barColors: ["#607284"]
-                });                
+	        		    LineColors: ["#607284"]
+                });
 
-              Morris.Bar({
-	        		    element: 'top10person_barchart_num',
+              Morris.Line({
+	        		    element: 'person_data_num',
 	        		    data: res.result,
-	        		    xkey: 'name',
+	        		    xkey: 'date_time',
 	        		    ykeys: ['num'],
 	        		    labels: ['曝光数'],
-	        		    barRatio: 0.2,
 	        		    xLabelAngle: 35,
 	        		    hideHover: 'auto',
-	        		    barColors: ["#F39C12"]
+	        		    LineColors: ["#F39C12"]
 	        		  });                
 	          }else{
 	        	  alert(res.message);
@@ -1671,7 +1880,156 @@
 	      })
   }
   
+  function initDeptSelect(){
+	  $.ajax({
+	        url: '/api/v1/wechat/getDept',
+	        type: 'get',
+	        data: {},
+	        success: function (res) {
+	          if(res.code==200){
+	              for (var i = 0; i < res.result.length; i++) {
+	                  $("#selectDept").append("<option id='"+ res.result[i].id+"'>" + res.result[i].text + "</option>");
+	                }
+	          }else{
+	        	  alert(res.message);
+	          }
+	        }
+	      })
+  }
+  
+  function initPersonSelect(){
+	  $.ajax({
+	        url: '/api/v1/wechat/getPerson',
+	        type: 'get',
+	        data: {},
+	        success: function (res) {
+	          if(res.code==200){
+	              for (var i = 0; i < res.result.length; i++) {
+	                  $("#selectPerson").append("<option id='"+ res.result[i].id+"'>" + res.result[i].text + "</option>");
+	                }
+	          }else{
+	        	  alert(res.message);
+	          }
+	        }
+	      })
+  }
+  
+  function selDept(obj) {
+	  var id = obj.options[obj.options.selectedIndex].id;
+	  var value = obj.options[obj.options.selectedIndex].value;
+	  var username = $.cookie('username');
+	  var beginDate = $("#beginDate").val();
+	  var endDate = $("#endDate").val();
+
+	  $.ajax({
+	        url: '/api/v1/wechat/getDeptData',
+	        type: 'get',
+	        //contentType: 'application/json',
+	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+	        data: {username:username,beginDate:beginDate,endDate:endDate,teamOrder:id},
+	        //dataType: 'text',
+	        success: function (res) {
+	          if(res.code==200){
+	        	  $("#dept_data").empty();
+	        	  $("#dept_data svg").remove();
+	        	  Morris.Line({
+	        		    element: 'dept_data',
+	        		    data: res.result,
+	        		    xkey: 'date_time',
+	        		    ykeys: ['amount','premium','num'],
+	        		    labels: ['成单数','保费','曝光数'],	        		   
+	        		    xLabelAngle: 35,
+	        		    hideHover: 'auto',
+	        		    LineColors: ["#A8D2ED", "#607284", "#F39C12", "#2C3E50", "#1abc9c", "#34495e", "#9b59b6", "#e74c3c"]
+              });
+	          }else{
+	        	  alert(res.message);
+	          }
+	        }
+	      })
+  }
+  
+  function selPerson(obj) {
+	  var id = obj.options[obj.options.selectedIndex].id;
+	  var value = obj.options[obj.options.selectedIndex].value;
+	  var username = $.cookie('username');
+	  var beginDate = $("#beginDate").val();
+	  var endDate = $("#endDate").val();
+
+	  $.ajax({
+	        url: '/api/v1/wechat/getPersonData',
+	        type: 'get',
+	        //contentType: 'application/json',
+	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+	        data: {username:username,beginDate:beginDate,endDate:endDate,userId:id},
+	        //dataType: 'text',
+	        success: function (res) {
+	          if(res.code==200){
+	        	  $("#person_data").empty();
+	        	  $("#person_data svg").remove();
+	        	  Morris.Line({
+	        		    element: 'person_data',
+	        		    data: res.result,
+	        		    xkey: 'date_time',
+	        		    ykeys: ['amount','premium','num'],
+	        		    labels: ['成单数','保费','曝光数'],	        		   
+	        		    xLabelAngle: 35,
+	        		    hideHover: 'auto',
+	        		    LineColors: ["#A8D2ED", "#607284", "#F39C12", "#2C3E50", "#1abc9c", "#34495e", "#9b59b6", "#e74c3c"]
+              });
+	          }else{
+	        	  alert(res.message);
+	          }
+	        }
+	      })
+  }
+  
+  function init() {
+      //定义locale汉化插件
+      var locale = {
+          "format": 'YYYY-MM-DD',
+          "separator": " -222 ",
+          "applyLabel": "确定",
+          "cancelLabel": "取消",
+          "fromLabel": "起始时间",
+          "toLabel": "结束时间",
+          "customRangeLabel": "自定义",
+          "weekLabel": "W",
+          "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],
+          "monthNames": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+          "firstDay": 1
+      };
+      //初始化显示当前时间
+      $('#daterange-btn span').html('2020-12-08' + ' - ' + moment().subtract(1, 'days').format('YYYY-MM-DD'));
+      //日期控件初始化
+      $('#daterange-btn').daterangepicker(
+          {
+              'locale': locale,
+              //汉化按钮部分
+              ranges: {
+                  '今日': [moment(), moment()],
+                  '昨日': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                  '最近7日': [moment().subtract(6, 'days'), moment()],
+                  '最近30日': [moment().subtract(29, 'days'), moment()],
+                  '本月': [moment().startOf('month'), moment().endOf('month')],
+                  '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+             },
+              startDate: moment().subtract(29, 'days'),
+              endDate: moment()
+          },
+          function (start, end) {
+              $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+              $("#beginDate").val(start.format('YYYY-MM-DD'));
+              $("#endDate").val(end.format('YYYY-MM-DD'));
+          }
+     );
+  };
+  
+ 
   $().ready(function() {
+	  init();
+	  initDeptSelect();
+	  initPersonSelect();
 	  var username = $.cookie('username');
       if(username == null || username =='undefined'){
     	  window.location='/login.html';
@@ -1679,9 +2037,14 @@
       $("#uname").text(username);
       getSumData();
       getTotalData();
-      getTop10DeptData();
-      getTop10PersonData();
-     });
+      getDeptData();
+      getPersonData();
+      getDeptDataByDay();
+      $("#btnDeptDay").click(function() {
+    	  getDeptDataByDay();
+      });
 
+     });
+  
   </script>
 </html>
