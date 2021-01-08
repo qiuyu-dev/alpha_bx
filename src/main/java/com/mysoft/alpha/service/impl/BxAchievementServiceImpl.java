@@ -81,13 +81,11 @@ public class BxAchievementServiceImpl implements BxAchievementService {
 		return list;
 	}
 
-
 	@Override
 	public List<Map<String, Object>> findTop10PersonData() {
 		List<Map<String, Object>> list = bxAchievementDao.findTop10PersonData();
 		return list;
 	}
-
 
 	@Override
 	public List<Map<String, Object>> findDeptDataByDay(String beginDate,  String endDate) {
@@ -95,6 +93,12 @@ public class BxAchievementServiceImpl implements BxAchievementService {
 		return list;
 	}
 
+	@Override
+	public List<Map<String, Object>> findPersonDataByDay(String beginDate, String endDate) {
+		List<Map<String, Object>> list = bxAchievementDao.findPersonDataByDay(beginDate, endDate);
+		return list;
+	}	
+	
 	@Override
 	public List<Map<String, Object>> findDeptData(String beginDate, String endDate, String teamOrder) {
 		List<Map<String, Object>> list = bxAchievementDao.findDeptData(beginDate, endDate, teamOrder);
@@ -118,4 +122,6 @@ public class BxAchievementServiceImpl implements BxAchievementService {
 		List<Map<String, Object>> list = bxAchievementDao.findAllPerson();
 		return list;
 	}
+
+
 }

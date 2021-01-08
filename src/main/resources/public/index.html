@@ -1498,10 +1498,7 @@
       $.ajax({
           url: '/api/logout',
           type: 'get',
-          //contentType: 'application/json',
-          //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
           data: {},
-          //dataType: 'text',
           success: function (res) {
             if(res.code==200){
             	delCookie("username");
@@ -1518,10 +1515,7 @@
 	  $.ajax({
 	        url: '/api/v1/wechat/getSumData',
 	        type: 'get',
-	        //contentType: 'application/json',
-	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
 	        data: {username:username},
-	        //dataType: 'text',
 	        success: function (res) {
 	          if(res.code==200){
               $("#period").text(res.result.period);
@@ -1540,10 +1534,7 @@
 	  $.ajax({
 	        url: '/api/v1/wechat/getTotalData',
 	        type: 'get',
-	        //contentType: 'application/json',
-	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
 	        data: {username:username},
-	        //dataType: 'text',
 	        success: function (res) {
 	          if(res.code==200){
 	        	  Morris.Line({
@@ -1567,10 +1558,7 @@
 	  $.ajax({
 	        url: '/api/v1/wechat/getTop10DeptData',
 	        type: 'get',
-	        //contentType: 'application/json',
-	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
 	        data: {username:username},
-	        //dataType: 'text',
 	        success: function (res) {
 	          if(res.code==200){
 
@@ -1622,10 +1610,7 @@
 	  $.ajax({
 	        url: '/api/v1/wechat/getTop10PersonData',
 	        type: 'get',
-	        //contentType: 'application/json',
-	        //contentType:"application/x-www-form-urlencoded; charset=UTF-8",
 	        data: {username:username},
-	        //dataType: 'text',
 	        success: function (res) {
 	          if(res.code==200){
 

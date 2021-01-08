@@ -133,6 +133,26 @@ public interface BxAchievementDao extends JpaRepository<BxAchievement, Integer> 
             nativeQuery = true)
     List<Map<String, Object>> findDeptData(@Param(value = "beginDate") String beginDate,  @Param(value = "endDate") String endDate, @Param(value = "teamOrder") String teamOrder);
 
+    @Query(value = "select user_name ,amount,premium,num from ( \n"
+            +"SELECT \n"
+    		+ " user_name ,\n"
+    		+ "    IFNULL(SUM(insure_amount) + SUM(official_amount),\n"
+    		+ "            0) amount,\n"
+    		+ "    IFNULL(SUM(insure_premium) + SUM(official_premium),\n"
+    		+ "            0) premium,\n"
+    		+ "    IFNULL(SUM(insure_exposure_num) + SUM(official_follow_num),\n"
+    		+ "            0) num\n"
+    		+ "FROM\n"
+    		+ "    bx.achieve_data\n"
+    		+ "WHERE\n"
+    		+ "    data_time >= DATE_FORMAT(:beginDate, '%Y-%m-%d') \n"
+    		+ "AND data_time <= DATE_SUB( DATE_FORMAT(:endDate, '%Y-%m-%d'), INTERVAL 1 DAY) \n"
+    		+ "GROUP BY user_name,team_name\n"
+    		+ "ORDER BY amount desc "
+    		+ ") as temp limit 30",
+            nativeQuery = true)
+    List<Map<String, Object>> findPersonDataByDay(@Param(value = "beginDate") String beginDate,  @Param(value = "endDate") String endDate);
+    
     @Query(value = "SELECT \n"
     		+ "concat(min(user_name),'[',min(team_name),']') user_name ,min(user_id) user_id, DATE_FORMAT(data_time, '%Y-%m-%d') date_time, \n"
     		+ "    IFNULL(SUM(insure_amount) + SUM(official_amount),\n"

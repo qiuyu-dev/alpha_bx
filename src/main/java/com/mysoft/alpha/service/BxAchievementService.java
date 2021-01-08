@@ -29,6 +29,8 @@ public interface BxAchievementService {
 	
 	List<Map<String, Object>> findDeptDataByDay(String beginDate,  String endDate);
 	
+	List<Map<String, Object>> findPersonDataByDay(String beginDate,  String endDate);
+	
 	List<Map<String, Object>> findDeptData(String beginDate,  String endDate, String teamOrder);
 	
 	List<Map<String, Object>> findPersonData(String beginDate,  String endDate, String userId);

@@ -358,12 +358,38 @@ public class WechatController {
     	if(StringUtils.isBlank(endDate)) {
     		endDate = DateUtil.getCurrentDate();    		
     	}
-    	System.out.println("beginDate="+beginDate);
-    	System.out.println("endDate="+endDate);
+//    	System.out.println("beginDate="+beginDate);
+//    	System.out.println("endDate="+endDate);
     	List<Map<String, Object>> list = bxAchievementService.findDeptDataByDay(beginDate, endDate);
 
     	return ResultFactory.buildSuccessResult(list);
     }
+    
+    @GetMapping("/getPersonDataByDay")
+    public Result getPersonDataByDay(@RequestParam(value = "username", required = false) String username, 
+    		@RequestParam(value = "beginDate", required = false) String beginDate,@RequestParam(value = "endDate", required = false) String endDate,
+    		                    HttpServletRequest request, HttpServletResponse response) {
+    	if(StringUtils.isNotBlank(username)) {
+    		User user = userService.findByUsername(username);
+    		if(user != null) {
+     			if (log.isInfoEnabled()) {
+    				log.info("" + user.getName() + " 调用接口 " + request.getRequestURI());
+    			}
+    		}
+    	}
+    	if(StringUtils.isBlank(beginDate)) {
+    		beginDate = "2020-12-08";
+    	}
+    	
+    	if(StringUtils.isBlank(endDate)) {
+    		endDate = DateUtil.getCurrentDate();    		
+    	}
+//    	System.out.println("beginDate="+beginDate);
+//    	System.out.println("endDate="+endDate);
+    	List<Map<String, Object>> list = bxAchievementService.findPersonDataByDay(beginDate, endDate);
+
+    	return ResultFactory.buildSuccessResult(list);
+    }    
     
     @GetMapping("/getDept")
     public Result getDept(HttpServletRequest request, HttpServletResponse response) {
