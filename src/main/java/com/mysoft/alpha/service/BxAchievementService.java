@@ -17,6 +17,8 @@ import com.mysoft.alpha.entity.BxAchievement;
 public interface BxAchievementService {
 	Map<String, Object> findSumData();
 	
+	List<Map<String, Object>>findAllAchievement();
+	
 	List<Map<String, Object>>findAllDept();
 	
 	List<Map<String, Object>>findAllPerson();

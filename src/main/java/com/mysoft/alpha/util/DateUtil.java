@@ -172,7 +172,7 @@ public class DateUtil {
 	 * 
 	 * @return返回字符串格式 yyyy-MM-dd HH:mm:ss
 	 */
-	public static String getStringDate() {
+	public static String getCurrentTime() {
 		Date currentTime = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String dateString = formatter.format(currentTime);
@@ -326,6 +326,20 @@ public class DateUtil {
 		SimpleDateFormat formatter = new SimpleDateFormat(sformat);
 		String dateString = formatter.format(currentTime);
 		return dateString;
+	}
+	
+	/**
+	 * 获取昨日日期
+	 * @return yyyyMMdd
+	 */
+	public static String getYesterdayDate(){
+	    Calendar cal = Calendar.getInstance();
+	    cal.add(Calendar.DATE, -1);
+	    return new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(strToDate("2020-12-08"));
 	}
 
 }

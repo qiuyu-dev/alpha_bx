@@ -124,4 +124,11 @@ public class BxAchievementServiceImpl implements BxAchievementService {
 	}
 
 
+	@Override
+	public List<Map<String, Object>> findAllAchievement() {
+		List<Map<String, Object>> list = bxAchievementDao.findAllAchievement();
+		return list;
+	}
+
+
 }

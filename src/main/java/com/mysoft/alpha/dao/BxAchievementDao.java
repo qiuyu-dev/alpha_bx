@@ -8,8 +8,10 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -19,6 +21,64 @@ import org.springframework.data.repository.query.Param;
  * @since 2020-11-29 14:13:12
  */
 public interface BxAchievementDao extends JpaRepository<BxAchievement, Integer> {
+    @Query(value = "SELECT max(id) id FROM bx.bx_achievement ", nativeQuery = true)
+     int findMaxId();
+    
+    @Transactional
+    @Modifying
+	@Query(value ="UPDATE bx_achievement a\n"
+			+ "set a.promotion_id = (select distinct b.id from bx_promotion b where a.url = b.plan_id)\n"
+			+ "where a.flag=1 and a.id >=:id ", nativeQuery = true)
+    int updateAchievement(@Param(value = "id") Integer id);
+    
+    @Transactional
+    @Modifying
+	@Query(value ="UPDATE bx_achievement a\n"
+			+ "set a.promotion_id = (select distinct b.id from bx_promotion b where a.url = b.fr)\n"
+			+ "where a.flag=2 and a.id >=:id ", nativeQuery = true)
+    int updateAchievementGzh(@Param(value = "id") Integer id);
+	
+	@Query(value ="SELECT\n"
+			+ "	e.NAME 姓名,\n"
+			+ "	e.username 手机号,\n"
+			+ "	e.team 团队,\n"
+			+ "	e.amount 成单量,\n"
+			+ "	e.exposure_num 曝光人数,\n"
+			+ "   e.premium 保费 \n"
+			+ "FROM\n"
+			+ "	(\n"
+			+ "	SELECT\n"
+			+ "		a.id user_id,\n"
+			+ "		a.NAME,\n"
+			+ "		a.username,\n"
+			+ "		a.team,\n"
+			+ "		a.enabled,\n"
+			+ "		b.promotion_id,\n"
+			+ "		b.amount,\n"
+			+ "		b.exposure_num,\n"
+			+ "		b.premium \n"
+			+ "	FROM\n"
+			+ "		USER a\n"
+			+ "		LEFT JOIN (\n"
+			+ "		SELECT\n"
+			+ "			user_id,\n"
+			+ "			d.promotion_id,\n"
+			+ "			c.amount,\n"
+			+ "			c.exposure_num,\n"
+			+ "			c.premium \n"
+			+ "		FROM\n"
+			+ "			bx_user_promotion d\n"
+			+ "			LEFT JOIN ( SELECT promotion_id, sum( amount ) amount, sum( exposure_num ) exposure_num, sum( premium ) premium FROM bx_achievement GROUP BY promotion_id ) c ON d.promotion_id = c.promotion_id \n"
+			+ "		) b ON a.id = b.user_id \n"
+			+ "	) e\n"
+			+ "	LEFT JOIN team_order f ON e.team = f.team \n"
+			+ "WHERE\n"
+			+ "	e.user_id >= 70 \n"
+			+ "	AND e.enabled = 1 \n"
+			+ "ORDER BY\n"
+			+ "	f.team_order,\n"
+			+ "	e.user_id", nativeQuery = true)
+	 List<Map<String, Object>> findAllAchievement();
 	
     @Query(value = "SELECT \n"
     		+ "     CONCAT(DATE_FORMAT(MIN(data_time), '%Y-%m-%d'),\n"
