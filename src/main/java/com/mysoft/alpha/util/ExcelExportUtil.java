@@ -169,12 +169,13 @@ public class ExcelExportUtil {
 		ParamFontStyle.setColor(HSSFColor.HSSFColorPredefined.RED.getIndex()); // 设置字体颜色 (红色)
 		ParamFontStyle.setFontHeightInPoints((short) this.fontSize);
 		cellParamStyle.setFont(ParamFontStyle);
-		// 设置每格数据的样式2（字体蓝色）
+		// 设置每格数据的样式2
 		HSSFCellStyle cellParamStyle2 = wb.createCellStyle();
 		cellParamStyle2.setAlignment(HorizontalAlignment.CENTER);
 		cellParamStyle2.setVerticalAlignment(VerticalAlignment.CENTER);
+		cellParamStyle2.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,#0"));//数据格式只显示整数，对String无效
 		HSSFFont ParamFontStyle2 = wb.createFont();
-		ParamFontStyle2.setColor(HSSFColor.HSSFColorPredefined.BLUE.getIndex()); // 设置字体颜色 (蓝色)
+		ParamFontStyle2.setColor(HSSFColor.HSSFColorPredefined.BLACK.getIndex()); 
 		ParamFontStyle2.setFontHeightInPoints((short) this.fontSize);
 		cellParamStyle2.setFont(ParamFontStyle2);
 		// 开始写入实体数据信息
@@ -203,10 +204,21 @@ public class ExcelExportUtil {
 				} else {
 					value = valueObject.toString();
 				}
-				// 设置单个单元格的字体颜色
-							 
+				// 设置单个单元格的字体颜色							 
 				cell.setCellValue(Strings.isNullOrEmpty(value) ? "" : value);
 				cell.setCellStyle(cellParamStyle2);
+				//个性化设置,只为显示整数
+				if(headKey[j].equals("成单量") || headKey[j].equals("曝光人数")) {
+//					HSSFDataFormat df = wb.createDataFormat(); // 此处设置数据格式
+					HSSFCellStyle cellParamStyle3 = wb.createCellStyle();
+					cellParamStyle3.setAlignment(HorizontalAlignment.CENTER);// 水平居中
+					cellParamStyle3.setVerticalAlignment(VerticalAlignment.CENTER);// 垂直居中
+					cellParamStyle3.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,#0"));//数据格式只显示整数
+					cellParamStyle3.setFont(ParamFontStyle2);
+					cell.setCellStyle(cellParamStyle3);
+					cell.setCellValue(Strings.isNullOrEmpty(value) ?0:Double.parseDouble(value));
+					
+				}
 			}
 			a++;
 		}

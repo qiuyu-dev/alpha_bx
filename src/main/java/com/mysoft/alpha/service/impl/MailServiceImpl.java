@@ -401,7 +401,7 @@ public class MailServiceImpl  implements MailService {
 			DataHandler handler = new DataHandler(ds);
 			bodyPart.setDataHandler(handler);
 			bodyPart.setContentID("attach"); 
-			bodyPart.setFileName(DateUtil.getYesterdayDate() +"统计.xls");
+			bodyPart.setFileName(DateUtil.getYesterdayDate() +"累计销量统计.xls");
 			multipart.addBodyPart(bodyPart);
 		
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);//true表示支持复杂类型
